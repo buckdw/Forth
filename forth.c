@@ -228,6 +228,24 @@ void op_greater_than(Stack *s) {
     push(s, (a > b) ? -1 : 0);
 }
 
+/* ZERO */
+void op_zero_equal(Stack *s) {
+    int a = pop(s);
+    push(s, (a == 0) ? -1 : 0);
+}
+
+/* NEG */
+void op_zero_less(Stack *s) {
+    int a = pop(s);
+    push(s, (a < 0) ? -1 : 0);
+}
+
+/* POS */
+void op_zero_greater(Stack *s) {
+    int a = pop(s);
+    push(s, (a > 0) ? -1 : 0);
+}
+
 /* NOT */
 void op_not(Stack *s) {
     int a = pop(s);
@@ -291,6 +309,9 @@ DictEntry dictionary[] = {
     {    LT, op_less_than   }, 
     {    EQ, op_equal       }, 
     {    GT, op_greater_than}, 
+    {  ZERO, op_zero_equal  },
+    {   NEG, op_zero_less   },
+    {   POS, op_zero_greater},
     { PRINT, op_print       },
     {  NULL, NULL           }    
 };

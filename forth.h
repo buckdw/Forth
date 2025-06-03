@@ -11,10 +11,12 @@
 #define LT      "<"
 #define MIN     "-"
 #define MUL     "*"
+#define NEG     "0<"
 #define NOT     "NOT"
 #define OVER    "OVER"
 #define PICK    "PICK"
 #define PLUS    "+"
+#define POS     "0>"
 #define PRINT   "."
 #define RFETCH  "R@"
 #define RFROM   "R>"
@@ -23,6 +25,7 @@
 #define STORE   "!"
 #define SWAP    "SWAP"
 #define TOR     ">R"
+#define ZERO    "0="
 
 #endif
 
