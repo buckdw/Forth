@@ -108,17 +108,7 @@ void op_rot(Stack *s) {
     push(s, a);         // A goes on top
 }
 
-/* @ -> read from memory address */
-void op_fetch(Stack *s) {
-    int addr = pop(s);
-    if (addr < 0 || addr >= MEMORY_SIZE) {
-        printf("Memory access out of bounds at @!\n");
-        exit(1);
-    }
-    push(s, memory[addr]);
-}
-
-/* ! -> store in memory address */
+/* ! -> store to memory address */
 void op_store(Stack *s) {
     int value = pop(s);
     int addr = pop(s);
@@ -127,6 +117,16 @@ void op_store(Stack *s) {
         exit(1);
     }
     memory[addr] = value;
+}
+
+/* @ -> fetch from memory address */
+void op_fetch(Stack *s) {
+    int addr = pop(s);
+    if (addr < 0 || addr >= MEMORY_SIZE) {
+        printf("Memory access out of bounds at @\n");
+        exit(1);
+    }
+    push(s, memory[addr]);
 }
 
 void op_print(Stack *s) {
