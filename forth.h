@@ -1,20 +1,21 @@
 #ifndef FORTH_H_
 #define FORTH_H_
 
-#define MIN     "-"
-#define PLUS    "+"
-#define MUL     "*"
+#define DEPTH   "DEPTH"
 #define DIV     "/"
-#define DUP     "DUP"
 #define DROP    "DROP"
-#define SWAP    "SWAP"
-#define ROT     "ROT"
+#define DUP     "DUP"
 #define FETCH   "@"
-#define STORE   "!"
-#define PRINT   "."
+#define MIN     "-"
+#define MUL     "*"
 #define OVER    "OVER"
 #define PICK    "PICK"
-#define DEPTH   "DEPTH"
+#define PLUS    "+"
+#define PRINT   "."
+#define ROLL    "ROLL"
+#define ROT     "ROT"
+#define STORE   "!"
+#define SWAP    "SWAP"
 
 #endif
 

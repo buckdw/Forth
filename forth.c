@@ -160,6 +160,26 @@ void op_depth(Stack *s) {
     push(s, s->top);
 }
 
+/* ROLL */
+void op_roll(Stack *s) {
+    if (s->top < 1) {
+        printf("Stack underflow for ROLL!\n");
+        exit(1);
+    }
+    int n = pop(s);  // depth to roll
+    if (n < 0 || n >= s->top) {
+        printf("Invalid ROLL index: %d\n", n);
+        exit(1);
+    }
+    int index = s->top - 1 - n;
+    int value = s->data[index];
+    for (int i = index; i < s->top - 1; i++) {
+        s->data[i] = s->data[i + 1];
+    }
+    s->data[s->top - 1] = value;
+}
+
+
 /* . -> print and remove */
 void op_print(Stack *s) {
     printf("%d\n", pop(s));
@@ -205,6 +225,7 @@ DictEntry dictionary[] = {
     { OVER, op_over },
     { PICK, op_pick },
     {DEPTH, op_depth},
+    { ROLL, op_roll },
     {PRINT, op_print},
     { NULL, NULL    }
 };
