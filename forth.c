@@ -129,6 +129,7 @@ void op_fetch(Stack *s) {
     push(s, memory[addr]);
 }
 
+/* . -> print and remove */
 void op_print(Stack *s) {
     printf("%d\n", pop(s));
 }
@@ -184,7 +185,7 @@ Operation find_word(const char *word) {
 }
 
 /*
- *  Lexical analysis
+ *  Tokenisation
  */
 void interpret(Stack *stack, char *line) {
     char *token = strtok(line, " \t\r\n");
