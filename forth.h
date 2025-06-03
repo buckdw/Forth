@@ -5,7 +5,10 @@
 #define DIV     "/"
 #define DROP    "DROP"
 #define DUP     "DUP"
+#define EQ      "="
 #define FETCH   "@"
+#define GT      ">"
+#define LT      "<"
 #define MIN     "-"
 #define MUL     "*"
 #define NOT     "NOT"
@@ -20,7 +23,6 @@
 #define STORE   "!"
 #define SWAP    "SWAP"
 #define TOR     ">R"
-#define LT      "<"
 
 #endif
 

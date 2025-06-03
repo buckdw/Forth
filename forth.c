@@ -75,10 +75,6 @@ void op_div(Stack *s) {
     push(s, a / b);
 }
 
-/*
- *  Builtin keywords
- */
-
 /* DUP */
 void op_dup(Stack *s) {
     push(s, peek(s));
@@ -218,6 +214,21 @@ void op_less_than(Stack *s) {
     push(s, (a < b) ? -1 : 0);
 }
 
+/* EQ -> EQUAL */
+void op_equal(Stack *s) {
+    int b = pop(s);
+    int a = pop(s);
+    push(s, (a == b) ? -1 : 0);
+}
+
+/* GT -> GREATER THAN */
+void op_greater_than(Stack *s) {
+    int b = pop(s);
+    int a = pop(s);
+    push(s, (a > b) ? -1 : 0);
+}
+
+
 /* NOT */
 void op_not(Stack *s) {
     int a = pop(s);
@@ -279,6 +290,8 @@ DictEntry dictionary[] = {
     {RFETCH, op_r_fetch     },
     {   NOT, op_not         },
     {    LT, op_less_than   }, 
+    {    EQ, op_equal       }, 
+    {    GT, op_greater_than}, 
     { PRINT, op_print       },
     {  NULL, NULL           }    
 };
