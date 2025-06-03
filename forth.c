@@ -162,10 +162,10 @@ typedef struct {
 
 
 DictEntry dictionary[] = {
-    {"+", op_add},
-    {"-", op_sub},
-    {"*", op_mul},
-    {"/", op_div},
+    {PLUS, op_add},
+    {MIN, op_sub},
+    {MUL, op_mul},
+    {DIV, op_div},
     {"dup", op_dup},
     {"drop", op_drop},
     {"swap", op_swap},
