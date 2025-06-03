@@ -220,14 +220,18 @@ void op_print(Stack *s) {
  *  Helper functions
  */
  void to_uppercase(char *str) {
-    for (; *str; ++str) *str = toupper(*str);
+    for (; *str; ++str) 
+        *str = toupper(*str);
 }
 
 int is_number(const char *token) {
-    if (*token == '-' || *token == '+') token++;
-    if (!*token) return 0;
+    if (*token == '-' || *token == '+') 
+        token++;
+    if (!*token) 
+        return 0;
     while (*token) {
-        if (!isdigit(*token)) return 0;
+        if (!isdigit(*token)) 
+            return 0;
         token++;
     }
     return 1;
