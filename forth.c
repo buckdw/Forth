@@ -73,19 +73,37 @@ void op_div(Stack *s) {
 /*
  *  Builtin keywords
  */
+
+/* DUP */
 void op_dup(Stack *s) {
     push(s, peek(s));
 }
 
+/* DROP */
 void op_drop(Stack *s) {
     pop(s);
 }
 
+/* SWAP */
 void op_swap(Stack *s) {
     int a = pop(s);
     int b = pop(s);
     push(s, a);
     push(s, b);
+}
+
+/* ROT */
+void op_rot(Stack *s) {
+    if (s->top < 3) {
+        printf("Stack underflow for ROT!\n");
+        exit(1);
+    }
+    int c = pop(s);     // Top
+    int b = pop(s);     // Second
+    int a = pop(s);     // Third
+    push(s, b);         // Now top is B
+    push(s, c);         // Now top is C
+    push(s, a);         // A goes on top
 }
 
 void op_print(Stack *s) {
@@ -126,6 +144,7 @@ DictEntry dictionary[] = {
     {"dup", op_dup},
     {"drop", op_drop},
     {"swap", op_swap},
+    {"rot", op_rot},
     {".", op_print},
     {NULL, NULL}
 };
