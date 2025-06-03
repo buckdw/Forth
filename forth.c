@@ -202,9 +202,9 @@ DictEntry dictionary[] = {
     {  ROT, op_rot},
     {FETCH, op_fetch},
     {STORE, op_store},
-    { OVER, op_over}
-    { PICK, op_pick}
-    {DEPTH, op_depth}
+    { OVER, op_over},
+    { PICK, op_pick},
+    {DEPTH, op_depth},
     {PRINT, op_print},
     { NULL, NULL}
 };
