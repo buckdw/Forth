@@ -117,6 +117,7 @@ void op_store(Stack *s) {
         exit(1);
     }
     memory[addr] = value;
+    printf("Storing %d at memory[%d]\n", value, addr);
 }
 
 /* @ -> fetch from memory address */
@@ -127,6 +128,7 @@ void op_fetch(Stack *s) {
         exit(1);
     }
     push(s, memory[addr]);
+    printf("Fetching memory[%d] = %d\n", addr, memory[addr]);
 }
 
 void op_print(Stack *s) {
