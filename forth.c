@@ -4,10 +4,10 @@
 #include <ctype.h>
 #include "forth.h"
 
-#define STACK_SIZE 4096
+#define STACK_SIZE 16384
 #define MAX_WORD_LENGTH 32
 #define LINE_SIZE 256
-#define MEMORY_SIZE 4096
+#define MEMORY_SIZE 16384
 
 int memory[MEMORY_SIZE];
 
@@ -16,8 +16,7 @@ typedef struct {
     int top;
 } Stack;
 
-Stack return_stack;
-return_stack.top = 0;
+Stack return_stack = { .top = 0 };
 
 void push(Stack *s, int value) {
     if (s->top >= STACK_SIZE) {
