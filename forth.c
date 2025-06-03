@@ -228,7 +228,6 @@ void op_greater_than(Stack *s) {
     push(s, (a > b) ? -1 : 0);
 }
 
-
 /* NOT */
 void op_not(Stack *s) {
     int a = pop(s);
