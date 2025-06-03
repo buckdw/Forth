@@ -110,8 +110,8 @@ void op_rot(Stack *s) {
 
 /* ! -> store to memory address */
 void op_store(Stack *s) {
-    int value = pop(s);
     int addr = pop(s);
+    int value = pop(s);
     if (addr < 0 || addr >= MEMORY_SIZE) {
         printf("Memory access out of bounds at !\n");
         exit(1);
