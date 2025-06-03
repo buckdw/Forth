@@ -12,12 +12,13 @@
 #define PICK    "PICK"
 #define PLUS    "+"
 #define PRINT   "."
+#define RFETCH  "R@"
+#define RFROM   "R>"
 #define ROLL    "ROLL"
 #define ROT     "ROT"
 #define STORE   "!"
 #define SWAP    "SWAP"
 #define TOR     ">R"
-#define RFROM   "R>"
 
 #endif
 
