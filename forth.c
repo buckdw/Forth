@@ -138,8 +138,8 @@ void op_print(Stack *s) {
 /*
  *  Helper functions
  */
- void to_lowercase(char *str) {
-    for (; *str; ++str) *str = tolower(*str);
+ void to_uppercase(char *str) {
+    for (; *str; ++str) *str = toupper(*str);
 }
 
 int is_number(const char *token) {
@@ -191,7 +191,7 @@ Operation find_word(const char *word) {
 void interpret(Stack *stack, char *line) {
     char *token = strtok(line, " \t\r\n");
     while (token != NULL) {
-        to_lowercase(token);
+        to_uppercase(token);
 
         Operation op = find_word(token);
         if (op) {
