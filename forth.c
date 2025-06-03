@@ -130,6 +130,36 @@ void op_fetch(Stack *s) {
     push(s, memory[addr]);
 }
 
+/* OVER */
+void op_over(Stack *s) {
+    if (s->top < 2) {
+        printf("Stack underflow for OVER!\n");
+        exit(1);
+    }
+    int x = s->data[s->top - 2];
+    push(s, x);
+}
+
+/* PICK */
+void op_pick(Stack *s) {
+    if (s->top < 1) {
+        printf("Stack underflow for PICK!\n");
+        exit(1);
+    }
+    int n = pop(s);  // the index
+    if (n < 0 || n >= s->top) {
+        printf("Invalid PICK index: %d\n", n);
+        exit(1);
+    }
+    int value = s->data[s->top - 1 - n];
+    push(s, value);
+}
+
+/* DEPTH */
+void op_depth(Stack *s) {
+    push(s, s->top);
+}
+
 /* . -> print and remove */
 void op_print(Stack *s) {
     printf("%d\n", pop(s));
@@ -162,18 +192,21 @@ typedef struct {
 
 
 DictEntry dictionary[] = {
-    {PLUS, op_add},
-    {MIN, op_sub},
-    {MUL, op_mul},
-    {DIV, op_div},
-    {DUP, op_dup},
-    {DROP, op_drop},
-    {SWAP, op_swap},
-    {ROT, op_rot},
+    { PLUS, op_add},
+    {  MIN, op_sub},
+    {  MUL, op_mul},
+    {  DIV, op_div},
+    {  DUP, op_dup},
+    { DROP, op_drop},
+    { SWAP, op_swap},
+    {  ROT, op_rot},
     {FETCH, op_fetch},
     {STORE, op_store},
+    { OVER, op_over}
+    { PICK, op_pick}
+    {DEPTH, op_depth}
     {PRINT, op_print},
-    {NULL, NULL}
+    { NULL, NULL}
 };
 
 Operation find_word(const char *word) {

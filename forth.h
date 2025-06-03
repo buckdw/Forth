@@ -12,6 +12,9 @@
 #define FETCH   "@"
 #define STORE   "!"
 #define PRINT   "."
+#define OVER    "OVER"
+#define PICK    "PICK"
+#define DEPTH   "DEPTH"
 
 #endif
 
