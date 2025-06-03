@@ -36,11 +36,12 @@ int peek(Stack *s) {
     return s->data[s->top - 1];
 }
 
+// Operation function type
+typedef void (*Operation)(Stack *);
 
 /*
  *  Operators
  */
-
 void op_add(Stack *s) {
     int b = pop(s);
     int a = pop(s);
@@ -72,7 +73,6 @@ void op_div(Stack *s) {
 /*
  *  Builtin keywords
  */
-
 void op_dup(Stack *s) {
     push(s, peek(s));
 }
@@ -95,7 +95,7 @@ void op_print(Stack *s) {
 /*
  *  Helper functions
  */
-void to_lowercase(char *str) {
+ void to_lowercase(char *str) {
     for (; *str; ++str) *str = tolower(*str);
 }
 
@@ -110,31 +110,48 @@ int is_number(const char *token) {
 }
 
 /*
- *  lexical analysis
+ *  Support structures and lookup tables 
+ */
+typedef struct {
+    const char *word;
+    Operation op;
+} DictEntry;
+
+
+DictEntry dictionary[] = {
+    {"+", op_add},
+    {"-", op_sub},
+    {"*", op_mul},
+    {"/", op_div},
+    {"dup", op_dup},
+    {"drop", op_drop},
+    {"swap", op_swap},
+    {".", op_print},
+    {NULL, NULL}
+};
+
+Operation find_word(const char *word) {
+    for (int i = 0; dictionary[i].word != NULL; i++) {
+        if (strcmp(dictionary[i].word, word) == 0) {
+            return dictionary[i].op;
+        }
+    }
+    return NULL;
+}
+
+/*
+ *  Lexical analysis
  */
 void interpret(Stack *stack, char *line) {
     char *token = strtok(line, " \t\r\n");
     while (token != NULL) {
         to_lowercase(token);
 
-        if (is_number(token)) {
+        Operation op = find_word(token);
+        if (op) {
+            op(stack);
+        } else if (is_number(token)) {
             push(stack, atoi(token));
-        } else if (strcmp(token, "+") == 0) {
-            op_add(stack);
-        } else if (strcmp(token, "-") == 0) {
-            op_sub(stack);
-        } else if (strcmp(token, "*") == 0) {
-            op_mul(stack);
-        } else if (strcmp(token, "/") == 0) {
-            op_div(stack);
-        } else if (strcmp(token, "dup") == 0) {
-            op_dup(stack);
-        } else if (strcmp(token, "drop") == 0) {
-            op_drop(stack);
-        } else if (strcmp(token, "swap") == 0) {
-            op_swap(stack);
-        } else if (strcmp(token, ".") == 0) {
-            op_print(stack);
         } else {
             printf("Unknown word: %s\n", token);
         }
@@ -143,12 +160,14 @@ void interpret(Stack *stack, char *line) {
     }
 }
 
+/*
+ *  Main
+ */
 int main() {
     Stack stack = { .top = 0 };
     char line[LINE_SIZE];
 
-    printf("Diederick's Forth Interpreter (C) - 2025\n"
-    printf("Type 'exit' to quit.\n");
+    printf("Diederick's Forth Interpreter (C) - 2025\nType 'exit' to quit.\n");
 
     while (1) {
         printf("> ");
