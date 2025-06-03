@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include "forth.h"
 
 #define STACK_SIZE 4096
 #define MAX_WORD_LENGTH 32
