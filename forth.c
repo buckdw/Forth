@@ -192,21 +192,21 @@ typedef struct {
 
 
 DictEntry dictionary[] = {
-    { PLUS, op_add},
-    {  MIN, op_sub},
-    {  MUL, op_mul},
-    {  DIV, op_div},
-    {  DUP, op_dup},
-    { DROP, op_drop},
-    { SWAP, op_swap},
-    {  ROT, op_rot},
+    { PLUS, op_add  },
+    {  MIN, op_sub  },
+    {  MUL, op_mul  },
+    {  DIV, op_div  },
+    {  DUP, op_dup  },
+    { DROP, op_drop },
+    { SWAP, op_swap },
+    {  ROT, op_rot  },
     {FETCH, op_fetch},
     {STORE, op_store},
-    { OVER, op_over},
-    { PICK, op_pick},
+    { OVER, op_over },
+    { PICK, op_pick },
     {DEPTH, op_depth},
     {PRINT, op_print},
-    { NULL, NULL}
+    { NULL, NULL    }
 };
 
 Operation find_word(const char *word) {
