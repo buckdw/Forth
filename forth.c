@@ -52,30 +52,26 @@ int is_number(const char *token) {
     return 1;
 }
 
-void interpret(Stack *stack, const char *line) {
-    char word[WORD_SIZE + 1];
-    int pos = 0;
+void interpret(Stack *stack, char *line) {
+    char *token = strtok(line, " \t\r\n");
+    while (token != NULL) {
+        to_lowercase(token);
 
-    while (sscanf(line + pos, "%s", word) == 1) {
-        to_lowercase(word);
-        pos += strlen(word);
-        while (line[pos] == ' ') pos++;  // skip spaces
-
-        if (is_number(word)) {
-            push(stack, atoi(word));
-        } else if (strcmp(word, "+") == 0) {
+        if (is_number(token)) {
+            push(stack, atoi(token));
+        } else if (strcmp(token, "+") == 0) {
             int b = pop(stack);
             int a = pop(stack);
             push(stack, a + b);
-        } else if (strcmp(word, "-") == 0) {
+        } else if (strcmp(token, "-") == 0) {
             int b = pop(stack);
             int a = pop(stack);
             push(stack, a - b);
-        } else if (strcmp(word, "*") == 0) {
+        } else if (strcmp(token, "*") == 0) {
             int b = pop(stack);
             int a = pop(stack);
             push(stack, a * b);
-        } else if (strcmp(word, "/") == 0) {
+        } else if (strcmp(token, "/") == 0) {
             int b = pop(stack);
             int a = pop(stack);
             if (b == 0) {
@@ -83,20 +79,22 @@ void interpret(Stack *stack, const char *line) {
                 exit(1);
             }
             push(stack, a / b);
-        } else if (strcmp(word, "dup") == 0) {
+        } else if (strcmp(token, "dup") == 0) {
             push(stack, peek(stack));
-        } else if (strcmp(word, "drop") == 0) {
+        } else if (strcmp(token, "drop") == 0) {
             pop(stack);
-        } else if (strcmp(word, "swap") == 0) {
+        } else if (strcmp(token, "swap") == 0) {
             int a = pop(stack);
             int b = pop(stack);
             push(stack, a);
             push(stack, b);
-        } else if (strcmp(word, ".") == 0) {
+        } else if (strcmp(token, ".") == 0) {
             printf("%d\n", pop(stack));
         } else {
-            printf("Unknown word: %s\n", word);
+            printf("Unknown word: %s\n", token);
         }
+
+        token = strtok(NULL, " \t\r\n");
     }
 }
 
