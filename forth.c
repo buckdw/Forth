@@ -16,6 +16,9 @@ typedef struct {
     int top;
 } Stack;
 
+Stack return_stack;
+return_stack.top = 0;
+
 void push(Stack *s, int value) {
     if (s->top >= STACK_SIZE) {
         printf("Stack overflow!\n");
@@ -179,6 +182,15 @@ void op_roll(Stack *s) {
     s->data[s->top - 1] = value;
 }
 
+/* >R -> TO R */
+void op_to_r(Stack *s) {
+    if (s->top == 0) {
+        printf("Stack underflow for >R!\n");
+        exit(1);
+    }
+    int value = pop(s);
+    push(&return_stack, value);
+}
 
 /* . -> print and remove */
 void op_print(Stack *s) {
@@ -226,6 +238,7 @@ DictEntry dictionary[] = {
     { PICK, op_pick },
     {DEPTH, op_depth},
     { ROLL, op_roll },
+    {  TOR, op_to_r },
     {PRINT, op_print},
     { NULL, NULL    }
 };

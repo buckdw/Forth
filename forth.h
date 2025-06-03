@@ -16,6 +16,7 @@
 #define ROT     "ROT"
 #define STORE   "!"
 #define SWAP    "SWAP"
+#define TOR     ">R"
 
 #endif
 
