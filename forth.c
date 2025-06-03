@@ -211,6 +211,13 @@ void op_r_fetch(Stack *s) {
     push(s, value);
 }
 
+/* LT -> LESS THAN */
+void op_less_than(Stack *s) {
+    int b = pop(s);
+    int a = pop(s);
+    push(s, (a < b) ? -1 : 0);
+}
+
 /* NOT */
 void op_not(Stack *s) {
     int a = pop(s);
@@ -253,26 +260,27 @@ typedef struct {
 
 
 DictEntry dictionary[] = {
-    {  PLUS, op_add    },
-    {   MIN, op_sub    },
-    {   MUL, op_mul    },
-    {   DIV, op_div    },
-    {   DUP, op_dup    },
-    {  DROP, op_drop   },
-    {  SWAP, op_swap   },
-    {   ROT, op_rot    },
-    { FETCH, op_fetch  },
-    { STORE, op_store  },
-    {  OVER, op_over   },
-    {  PICK, op_pick   },
-    { DEPTH, op_depth  },
-    {  ROLL, op_roll   },
-    {   TOR, op_to_r   },
-    { RFROM, op_r_from },
-    {RFETCH, op_r_fetch},
-    {   NOT, op_not    },
-    { PRINT, op_print  },
-    {  NULL, NULL      }
+    {  PLUS, op_add         },
+    {   MIN, op_sub         },
+    {   MUL, op_mul         },
+    {   DIV, op_div         },
+    {   DUP, op_dup         },
+    {  DROP, op_drop        },
+    {  SWAP, op_swap        },
+    {   ROT, op_rot         },
+    { FETCH, op_fetch       },
+    { STORE, op_store       },
+    {  OVER, op_over        },
+    {  PICK, op_pick        },
+    { DEPTH, op_depth       },
+    {  ROLL, op_roll        },
+    {   TOR, op_to_r        },
+    { RFROM, op_r_from      },
+    {RFETCH, op_r_fetch     },
+    {   NOT, op_not         },
+    {    LT, op_less_than   }, 
+    { PRINT, op_print       },
+    {  NULL, NULL           }    
 };
 
 Operation find_word(const char *word) {

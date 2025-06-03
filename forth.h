@@ -20,6 +20,7 @@
 #define STORE   "!"
 #define SWAP    "SWAP"
 #define TOR     ">R"
+#define LT      "<"
 
 #endif
 
