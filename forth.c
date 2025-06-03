@@ -3,8 +3,8 @@
 #include <string.h>
 #include <ctype.h>
 
-#define STACK_SIZE 4096
-#define WORD_SIZE 32
+#define STACK_SIZE 1024
+#define MAX_WORD_LENGTH 32
 #define LINE_SIZE 256
 
 typedef struct {
@@ -36,22 +36,82 @@ int peek(Stack *s) {
     return s->data[s->top - 1];
 }
 
+
+/*
+ *  Operators
+ */
+
+void op_add(Stack *s) {
+    int b = pop(s);
+    int a = pop(s);
+    push(s, a + b);
+}
+
+void op_sub(Stack *s) {
+    int b = pop(s);
+    int a = pop(s);
+    push(s, a - b);
+}
+
+void op_mul(Stack *s) {
+    int b = pop(s);
+    int a = pop(s);
+    push(s, a * b);
+}
+
+void op_div(Stack *s) {
+    int b = pop(s);
+    int a = pop(s);
+    if (b == 0) {
+        printf("Division by zero!\n");
+        exit(1);
+    }
+    push(s, a / b);
+}
+
+/*
+ *  Builtin keywords
+ */
+
+void op_dup(Stack *s) {
+    push(s, peek(s));
+}
+
+void op_drop(Stack *s) {
+    pop(s);
+}
+
+void op_swap(Stack *s) {
+    int a = pop(s);
+    int b = pop(s);
+    push(s, a);
+    push(s, b);
+}
+
+void op_print(Stack *s) {
+    printf("%d\n", pop(s));
+}
+
+/*
+ *  Helper functions
+ */
 void to_lowercase(char *str) {
-    for (; *str; ++str) 
-        *str = tolower(*str);
+    for (; *str; ++str) *str = tolower(*str);
 }
 
 int is_number(const char *token) {
-    if (*token == '-' || *token == '+') 
-        token++;
+    if (*token == '-' || *token == '+') token++;
+    if (!*token) return 0;
     while (*token) {
-        if (!isdigit(*token)) 
-            return 0;
+        if (!isdigit(*token)) return 0;
         token++;
     }
     return 1;
 }
 
+/*
+ *  lexical analysis
+ */
 void interpret(Stack *stack, char *line) {
     char *token = strtok(line, " \t\r\n");
     while (token != NULL) {
@@ -60,36 +120,21 @@ void interpret(Stack *stack, char *line) {
         if (is_number(token)) {
             push(stack, atoi(token));
         } else if (strcmp(token, "+") == 0) {
-            int b = pop(stack);
-            int a = pop(stack);
-            push(stack, a + b);
+            op_add(stack);
         } else if (strcmp(token, "-") == 0) {
-            int b = pop(stack);
-            int a = pop(stack);
-            push(stack, a - b);
+            op_sub(stack);
         } else if (strcmp(token, "*") == 0) {
-            int b = pop(stack);
-            int a = pop(stack);
-            push(stack, a * b);
+            op_mul(stack);
         } else if (strcmp(token, "/") == 0) {
-            int b = pop(stack);
-            int a = pop(stack);
-            if (b == 0) {
-                printf("Division by zero!\n");
-                exit(1);
-            }
-            push(stack, a / b);
+            op_div(stack);
         } else if (strcmp(token, "dup") == 0) {
-            push(stack, peek(stack));
+            op_dup(stack);
         } else if (strcmp(token, "drop") == 0) {
-            pop(stack);
+            op_drop(stack);
         } else if (strcmp(token, "swap") == 0) {
-            int a = pop(stack);
-            int b = pop(stack);
-            push(stack, a);
-            push(stack, b);
+            op_swap(stack);
         } else if (strcmp(token, ".") == 0) {
-            printf("%d\n", pop(stack));
+            op_print(stack);
         } else {
             printf("Unknown word: %s\n", token);
         }
@@ -100,9 +145,10 @@ void interpret(Stack *stack, char *line) {
 
 int main() {
     Stack stack = { .top = 0 };
-    char line[LINE_SIZE + 1];
+    char line[LINE_SIZE];
 
-    printf("Diederick's simple Forth Interpreter (C)\nType 'exit' to quit.\n");
+    printf("Diederick's Forth Interpreter (C) - 2025\n"
+    printf("Type 'exit' to quit.\n");
 
     while (1) {
         printf("> ");
