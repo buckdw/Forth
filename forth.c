@@ -3,9 +3,12 @@
 #include <string.h>
 #include <ctype.h>
 
-#define STACK_SIZE 1024
+#define STACK_SIZE 4096
 #define MAX_WORD_LENGTH 32
 #define LINE_SIZE 256
+#define MEMORY_SIZE 4096
+
+int memory[MEMORY_SIZE];
 
 typedef struct {
     int data[STACK_SIZE];
@@ -36,7 +39,6 @@ int peek(Stack *s) {
     return s->data[s->top - 1];
 }
 
-// Operation function type
 typedef void (*Operation)(Stack *);
 
 /*
@@ -106,6 +108,27 @@ void op_rot(Stack *s) {
     push(s, a);         // A goes on top
 }
 
+/* @ -> read from memory address */
+void op_fetch(Stack *s) {
+    int addr = pop(s);
+    if (addr < 0 || addr >= MEMORY_SIZE) {
+        printf("Memory access out of bounds at @!\n");
+        exit(1);
+    }
+    push(s, memory[addr]);
+}
+
+/* ! -> store in memory address */
+void op_store(Stack *s) {
+    int value = pop(s);
+    int addr = pop(s);
+    if (addr < 0 || addr >= MEMORY_SIZE) {
+        printf("Memory access out of bounds at !\n");
+        exit(1);
+    }
+    memory[addr] = value;
+}
+
 void op_print(Stack *s) {
     printf("%d\n", pop(s));
 }
@@ -145,6 +168,8 @@ DictEntry dictionary[] = {
     {"drop", op_drop},
     {"swap", op_swap},
     {"rot", op_rot},
+    {"@", op_fetch},
+    {"!", op_store},
     {".", op_print},
     {NULL, NULL}
 };
