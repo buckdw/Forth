@@ -9,8 +9,9 @@
 #define DROP    "DROP"
 #define SWAP    "SWAP"
 #define ROT     "ROT"
-#define FETCH   "FETCH"
-#define STORE   "STORE"
+#define FETCH   "@"
+#define STORE   "!"
+#define PRINT   "."
 
 #endif
 

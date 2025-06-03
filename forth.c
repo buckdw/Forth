@@ -166,13 +166,13 @@ DictEntry dictionary[] = {
     {MIN, op_sub},
     {MUL, op_mul},
     {DIV, op_div},
-    {"dup", op_dup},
-    {"drop", op_drop},
-    {"swap", op_swap},
-    {"rot", op_rot},
-    {"@", op_fetch},
-    {"!", op_store},
-    {".", op_print},
+    {DUP, op_dup},
+    {DROP, op_drop},
+    {SWAP, op_swap},
+    {ROT, op_rot},
+    {FETCH, op_fetch},
+    {STORE, op_store},
+    {PRINT, op_print},
     {NULL, NULL}
 };
 
