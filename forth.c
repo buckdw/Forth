@@ -191,6 +191,16 @@ void op_to_r(Stack *s) {
     push(&return_stack, value);
 }
 
+/* R> -> R FROM */
+void op_r_from(Stack *s) {
+    if (return_stack.top == 0) {
+        printf("Return stack underflow for R>!\n");
+        exit(1);
+    }
+    int value = pop(&return_stack);
+    push(s, value);
+}
+
 /* . -> print and remove */
 void op_print(Stack *s) {
     printf("%d\n", pop(s));
@@ -223,23 +233,24 @@ typedef struct {
 
 
 DictEntry dictionary[] = {
-    { PLUS, op_add  },
-    {  MIN, op_sub  },
-    {  MUL, op_mul  },
-    {  DIV, op_div  },
-    {  DUP, op_dup  },
-    { DROP, op_drop },
-    { SWAP, op_swap },
-    {  ROT, op_rot  },
-    {FETCH, op_fetch},
-    {STORE, op_store},
-    { OVER, op_over },
-    { PICK, op_pick },
-    {DEPTH, op_depth},
-    { ROLL, op_roll },
-    {  TOR, op_to_r },
-    {PRINT, op_print},
-    { NULL, NULL    }
+    { PLUS, op_add   },
+    {  MIN, op_sub   },
+    {  MUL, op_mul   },
+    {  DIV, op_div   },
+    {  DUP, op_dup   },
+    { DROP, op_drop  },
+    { SWAP, op_swap  },
+    {  ROT, op_rot   },
+    {FETCH, op_fetch },
+    {STORE, op_store },
+    { OVER, op_over  },
+    { PICK, op_pick  },
+    {DEPTH, op_depth },
+    { ROLL, op_roll  },
+    {  TOR, op_to_r  },
+    {RFROM, op_r_from},
+    {PRINT, op_print },
+    { NULL, NULL     }
 };
 
 Operation find_word(const char *word) {

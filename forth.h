@@ -17,6 +17,7 @@
 #define STORE   "!"
 #define SWAP    "SWAP"
 #define TOR     ">R"
+#define RFROM   "R>"
 
 #endif
 
