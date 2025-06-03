@@ -55,7 +55,7 @@ int is_number(const char *token) {
 void interpret(Stack *stack, const char *line) {
     char word[WORD_SIZE + 1];
     int pos = 0;
-    
+
     while (sscanf(line + pos, "%s", word) == 1) {
         to_lowercase(word);
         pos += strlen(word);
@@ -104,7 +104,7 @@ int main() {
     Stack stack = { .top = 0 };
     char line[LINE_SIZE + 1];
 
-    printf("Simple Forth Interpreter (C)\nType 'exit' to quit.\n");
+    printf("Diederick's simple Forth Interpreter (C)\nType 'exit' to quit.\n");
 
     while (1) {
         printf("> ");
@@ -114,7 +114,6 @@ int main() {
             break;
         interpret(&stack, line);
 
-        // Show stack after each line
         printf("Stack: ");
         for (int i = 0; i < stack.top; i++) {
             printf("%d ", stack.data[i]);
