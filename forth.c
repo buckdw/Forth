@@ -211,6 +211,12 @@ void op_r_fetch(Stack *s) {
     push(s, value);
 }
 
+/* NOT */
+void op_not(Stack *s) {
+    int a = pop(s);
+    push(s, ~a);
+}
+
 /* . -> print and remove */
 void op_print(Stack *s) {
     printf("%d\n", pop(s));
@@ -264,6 +270,7 @@ DictEntry dictionary[] = {
     {   TOR, op_to_r   },
     { RFROM, op_r_from },
     {RFETCH, op_r_fetch},
+    {   NOT, op_not    },
     { PRINT, op_print  },
     {  NULL, NULL      }
 };

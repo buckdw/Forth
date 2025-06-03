@@ -8,6 +8,7 @@
 #define FETCH   "@"
 #define MIN     "-"
 #define MUL     "*"
+#define NOT     "NOT"
 #define OVER    "OVER"
 #define PICK    "PICK"
 #define PLUS    "+"
