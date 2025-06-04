@@ -320,6 +320,7 @@ typedef struct {
     const char *word;
     OpType type;
     union {
+        OpFunc  f;
         OpFunc0 f0;
         OpFunc1 f1;
         OpFunc2 f2;
