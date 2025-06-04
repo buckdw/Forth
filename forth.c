@@ -40,10 +40,10 @@ int peek(Stack *s) {
 }
 
 typedef enum {
-    OP,     // ()
-    OP_0,   // (stack)
-    OP_1,   // (stack, return_stack)
-    OP_2,   // (stack, memory)
+    OP,     // f()
+    OP_0,   // f(Stack *s)
+    OP_1,   // f(Stack *s, Stack *rs)
+    OP_2,   // f(Stack *s, int *m)
 } OpType;
 
 typedef void (*OpFunc)();
@@ -295,6 +295,42 @@ void op_spaces(Stack *s) {
     fflush(stdout);
 }
 
+/* COUNT */
+void op_count(Stack *s, int *m) {
+    int addr = pop(s);
+    if (addr < 0 || addr >= MEMORY_SIZE) {
+        printf("Invalid address in COUNT\n");
+        exit(EXIT_FAILURE);
+    }
+    int len = m[addr];
+    if (addr + 1 >= MEMORY_SIZE) {
+        printf("COUNT results in out-of-bounds address\n");
+        exit(EXIT_FAILURE);
+    }
+    push(s, addr + 1);  // Address of first char
+    push(s, len);       // Length
+}
+
+/* TYPE */
+void op_type(Stack *s, int *m) {
+    int len = pop(s);
+    int addr = pop(s);
+    if (addr < 0 || addr + len > MEMORY_SIZE) {
+        printf("Invalid memory range in TYPE\n");
+        exit(EXIT_FAILURE);
+    }
+    for (int i = 0; i < len; i++) {
+        int val = m[addr + i];
+        if (val < 0 || val > 255) {
+            printf("Invalid character code in TYPE: %d\n", val);
+            exit(EXIT_FAILURE);
+        }
+        putchar(val);
+    }
+    fflush(stdout);
+}
+
+
 /* EXIT -- pseudo command */
 void op_exit() {
     exit(EXIT_SUCCESS);
@@ -341,37 +377,39 @@ typedef struct {
 } DictEntry;
 
 DictEntry dictionary[] = {
-    {   PLUS, OP_0, {.f_s = op_add            } },
-    {    MIN, OP_0, {.f_s = op_sub            } },
-    {    MUL, OP_0, {.f_s = op_mul            } },
-    {    DIV, OP_0, {.f_s = op_div            } },
-    {    DUP, OP_0, {.f_s = op_dup            } },
-    {   DROP, OP_0, {.f_s = op_drop           } },
-    {   SWAP, OP_0, {.f_s = op_swap           } },
-    {    ROT, OP_0, {.f_s = op_rot            } },
-    {  FETCH, OP_2, {.f_s_m = op_fetch        } },
-    {  STORE, OP_2, {.f_s_m = op_store        } },
-    {   OVER, OP_0, {.f_s = op_over           } },
-    {   PICK, OP_0, {.f_s = op_pick           } },
-    {  DEPTH, OP_0, {.f_s = op_depth          } },
-    {   ROLL, OP_0, {.f_s = op_roll           } },
-    {    TOR, OP_1, {.f_s_rs = op_to_r        } },
-    {  RFROM, OP_1, {.f_s_rs = op_r_from      } },
-    { RFETCH, OP_1, {.f_s_rs = op_r_fetch     } },
-    {    NOT, OP_0, {.f_s = op_not            } },
-    {     LT, OP_0, {.f_s = op_less_than      } }, 
-    {     EQ, OP_0, {.f_s = op_equal          } }, 
-    {     GT, OP_0, {.f_s = op_greater_than   } }, 
-    {   ZERO, OP_0, {.f_s = op_zero_equal     } },
-    {    NEG, OP_0, {.f_s = op_zero_less      } },
-    {    POS, OP_0, {.f_s = op_zero_greater   } },
-    {   EMIT, OP_0, {.f_s = op_emit           } },
-    {  SPACE, OP,   {.f = op_space            } },
-    {     CR, OP,   {.f = op_cr               } },
-    { SPACES, OP_0, {.f_s = op_spaces         } },
-    {   EXIT, OP,   {.f = op_exit             } },
-    {  PRINT, OP_0, {.f_s = op_print          } },
-    {   NULL, OP_0, {NULL                     } }
+    {   PLUS, OP_0, {.f_s       = op_add            } },
+    {    MIN, OP_0, {.f_s       = op_sub            } },
+    {    MUL, OP_0, {.f_s       = op_mul            } },
+    {    DIV, OP_0, {.f_s       = op_div            } },
+    {    DUP, OP_0, {.f_s       = op_dup            } },
+    {   DROP, OP_0, {.f_s       = op_drop           } },
+    {   SWAP, OP_0, {.f_s       = op_swap           } },
+    {    ROT, OP_0, {.f_s       = op_rot            } },
+    {  FETCH, OP_2, {.f_s_m     = op_fetch          } },
+    {  STORE, OP_2, {.f_s_m     = op_store          } },
+    {   OVER, OP_0, {.f_s       = op_over           } },
+    {   PICK, OP_0, {.f_s       = op_pick           } },
+    {  DEPTH, OP_0, {.f_s       = op_depth          } },
+    {   ROLL, OP_0, {.f_s       = op_roll           } },
+    {    TOR, OP_1, {.f_s_rs    = op_to_r           } },
+    {  RFROM, OP_1, {.f_s_rs    = op_r_from         } },
+    { RFETCH, OP_1, {.f_s_rs    = op_r_fetch        } },
+    {    NOT, OP_0, {.f_s       = op_not            } },
+    {     LT, OP_0, {.f_s       = op_less_than      } }, 
+    {     EQ, OP_0, {.f_s       = op_equal          } }, 
+    {     GT, OP_0, {.f_s       = op_greater_than   } }, 
+    {   ZERO, OP_0, {.f_s       = op_zero_equal     } },
+    {    NEG, OP_0, {.f_s       = op_zero_less      } },
+    {    POS, OP_0, {.f_s       = op_zero_greater   } },
+    {   EMIT, OP_0, {.f_s       = op_emit           } },
+    {  SPACE, OP,   {.f         = op_space          } },
+    {     CR, OP,   {.f         = op_cr             } },
+    { SPACES, OP_0, {.f_s       = op_spaces         } },
+    {  COUNT, OP_2, {.f_s_m     = op_count          } },
+    {   TYPE, OP_2, {.f_s_m     = op_type           } },    
+    {   EXIT, OP,   {.f         = op_exit           } },
+    {  PRINT, OP_0, {.f_s       = op_print          } },
+    {   NULL, OP_0, {NULL                           } }
 }; 
  
 DictEntry *find_entry(const char *word) {
