@@ -468,7 +468,7 @@ int main() {
     int memory[MEMORY_SIZE];
     char line[LINE_SIZE + 1];
 
-    printf("Diederick's Forth Interpreter (C) - 2025)\n");
+    printf("Diederick's Forth Interpreter (C) - 2025\n");
     printf("Type 'exit' to quit.\n");
 
     while (true) {
