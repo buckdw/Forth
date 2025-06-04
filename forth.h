@@ -1,6 +1,7 @@
 #ifndef FORTH_H_
 #define FORTH_H_
 
+#define CR      "CR"
 #define DEPTH   "DEPTH"
 #define DIV     "/"
 #define DROP    "DROP"
@@ -25,11 +26,11 @@
 #define ROLL    "ROLL"
 #define ROT     "ROT"
 #define SPACE   "SPACE"
+#define SPACES  "SPACES"
 #define STORE   "!"
 #define SWAP    "SWAP"
 #define TOR     ">R"
 #define ZERO    "0="
-#define CR      "CR"
 
 #endif
 

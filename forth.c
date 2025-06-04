@@ -282,6 +282,19 @@ void op_cr() {
     fflush(stdout);
 }
 
+/* SPACES */
+void op_spaces(Stack *s) {
+    int count = pop(s);
+    if (count < 0) {
+        printf("Invalid SPACES count: %d\n", count);
+        exit(EXIT_FAILURE);
+    }
+    for (int i = 0; i < count; i++) {
+        putchar(' ');
+    }
+    fflush(stdout);
+}
+
 /* EXIT -- pseudo command */
 void op_exit() {
     exit(EXIT_SUCCESS);
@@ -328,38 +341,39 @@ typedef struct {
 } DictEntry;
 
 DictEntry dictionary[] = {
-    {  PLUS, OP_0, {.f_s = op_add            } },
-    {   MIN, OP_0, {.f_s = op_sub            } },
-    {   MUL, OP_0, {.f_s = op_mul            } },
-    {   DIV, OP_0, {.f_s = op_div            } },
-    {   DUP, OP_0, {.f_s = op_dup            } },
-    {  DROP, OP_0, {.f_s = op_drop           } },
-    {  SWAP, OP_0, {.f_s = op_swap           } },
-    {   ROT, OP_0, {.f_s = op_rot            } },
-    { FETCH, OP_2, {.f_s_m = op_fetch        } },
-    { STORE, OP_2, {.f_s_m = op_store        } },
-    {  OVER, OP_0, {.f_s = op_over           } },
-    {  PICK, OP_0, {.f_s = op_pick           } },
-    { DEPTH, OP_0, {.f_s = op_depth          } },
-    {  ROLL, OP_0, {.f_s = op_roll           } },
-    {   TOR, OP_1, {.f_s_rs = op_to_r        } },
-    { RFROM, OP_1, {.f_s_rs = op_r_from      } },
-    {RFETCH, OP_1, {.f_s_rs = op_r_fetch     } },
-    {   NOT, OP_0, {.f_s = op_not            } },
-    {    LT, OP_0, {.f_s = op_less_than      } }, 
-    {    EQ, OP_0, {.f_s = op_equal          } }, 
-    {    GT, OP_0, {.f_s = op_greater_than   } }, 
-    {  ZERO, OP_0, {.f_s = op_zero_equal     } },
-    {   NEG, OP_0, {.f_s = op_zero_less      } },
-    {   POS, OP_0, {.f_s = op_zero_greater   } },
-    {  EMIT, OP_0, {.f_s = op_emit           } },
-    { SPACE, OP,   {.f = op_space            } },
-    {    CR, OP,   {.f = op_cr               } },
-    {  EXIT, OP,   {.f = op_exit             } },
-    { PRINT, OP_0, {.f_s = op_print          } },
-    {  NULL, OP_0, {NULL                     } }
-};
-
+    {   PLUS, OP_0, {.f_s = op_add            } },
+    {    MIN, OP_0, {.f_s = op_sub            } },
+    {    MUL, OP_0, {.f_s = op_mul            } },
+    {    DIV, OP_0, {.f_s = op_div            } },
+    {    DUP, OP_0, {.f_s = op_dup            } },
+    {   DROP, OP_0, {.f_s = op_drop           } },
+    {   SWAP, OP_0, {.f_s = op_swap           } },
+    {    ROT, OP_0, {.f_s = op_rot            } },
+    {  FETCH, OP_2, {.f_s_m = op_fetch        } },
+    {  STORE, OP_2, {.f_s_m = op_store        } },
+    {   OVER, OP_0, {.f_s = op_over           } },
+    {   PICK, OP_0, {.f_s = op_pick           } },
+    {  DEPTH, OP_0, {.f_s = op_depth          } },
+    {   ROLL, OP_0, {.f_s = op_roll           } },
+    {    TOR, OP_1, {.f_s_rs = op_to_r        } },
+    {  RFROM, OP_1, {.f_s_rs = op_r_from      } },
+    { RFETCH, OP_1, {.f_s_rs = op_r_fetch     } },
+    {    NOT, OP_0, {.f_s = op_not            } },
+    {     LT, OP_0, {.f_s = op_less_than      } }, 
+    {     EQ, OP_0, {.f_s = op_equal          } }, 
+    {     GT, OP_0, {.f_s = op_greater_than   } }, 
+    {   ZERO, OP_0, {.f_s = op_zero_equal     } },
+    {    NEG, OP_0, {.f_s = op_zero_less      } },
+    {    POS, OP_0, {.f_s = op_zero_greater   } },
+    {   EMIT, OP_0, {.f_s = op_emit           } },
+    {  SPACE, OP,   {.f = op_space            } },
+    {     CR, OP,   {.f = op_cr               } },
+    { SPACES, OP_0, {.f_s = op_spaces         } },
+    {   EXIT, OP,   {.f = op_exit             } },
+    {  PRINT, OP_0, {.f_s = op_print          } },
+    {   NULL, OP_0, {NULL                     } }
+}; 
+ 
 DictEntry *find_entry(const char *word) {
     for (int i = 0; dictionary[i].word != NULL; i++) {
         if (strcmp(dictionary[i].word, word) == 0) {
