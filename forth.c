@@ -18,8 +18,6 @@ typedef struct {
     int top;
 } Stack;
 
-Stack return_stack = { .top = 0 };
-
 void push(Stack *s, int value) {
     if (s->top >= STACK_SIZE) {
         printf("Stack overflow!\n");
@@ -191,7 +189,7 @@ void op_to_r(Stack *s, Stack *rs) {
 
 /* R> -> R FROM */
 void op_r_from(Stack *s, Stack *rs) {
-    if (return_stack.top == 0) {
+    if (rs->top == 0) {
         printf("Return stack underflow for R>!\n");
         exit(1);
     }
