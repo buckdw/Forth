@@ -13,9 +13,9 @@
 int memory[MEMORY_SIZE];
 
 typedef enum {
-    OP_0,   // zero parameters (stack only)
-    OP_1,   // one parameter (stack)
-    OP_2,   // two parameters (stack + return stack)
+    OP_0,   // (stack)
+    OP_1,   // (stack, return_stack)
+    OP_2,   // (stack, memory)
     OP_3    // hypothetical: stack + rs + extra param (not used now)
 } OpType;
 
@@ -50,7 +50,7 @@ int peek(Stack *s) {
 
 typedef void (*OpFunc0)(Stack *s);
 typedef void (*OpFunc1)(Stack *s, Stack *rs);
-typedef void (*OpFunc2)(Stack *s, Stack *rs, int param); 
+typedef void (*OpFunc2)(Stack *s, int *m); 
 
 /*
  *  Operators
@@ -116,24 +116,24 @@ void op_rot(Stack *s) {
 }
 
 /* ! -> store to memory address */
-void op_store(Stack *s) {
+void op_store(Stack *s, int *m) {
     int addr = pop(s);
     int value = pop(s);
     if (addr < 0 || addr >= MEMORY_SIZE) {
         printf("Memory access out of bounds at !\n");
         exit(1);
     }
-    memory[addr] = value;
+    m[addr] = value;
 }
 
 /* @ -> fetch from memory address */
-void op_fetch(Stack *s) {
+void op_fetch(Stack *s, int *m) {
     int addr = pop(s);
     if (addr < 0 || addr >= MEMORY_SIZE) {
         printf("Memory access out of bounds at @\n");
         exit(1);
     }
-    push(s, memory[addr]);
+    push(s, m[addr]);
 }
 
 /* OVER */
@@ -336,8 +336,8 @@ DictEntry dictionary[] = {
     {  DROP, OP_0, {.f0 = op_drop           } },
     {  SWAP, OP_0, {.f0 = op_swap           } },
     {   ROT, OP_0, {.f0 = op_rot            } },
-    { FETCH, OP_0, {.f0 = op_fetch          } },
-    { STORE, OP_0, {.f0 = op_store          } },
+    { FETCH, OP_2, {.f2 = op_fetch          } },
+    { STORE, OP_2, {.f2 = op_store          } },
     {  OVER, OP_0, {.f0 = op_over           } },
     {  PICK, OP_0, {.f0 = op_pick           } },
     { DEPTH, OP_0, {.f0 = op_depth          } },
