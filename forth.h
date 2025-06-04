@@ -14,6 +14,7 @@
 #define GT      ">"
 #define LT      "<"
 #define MIN     "-"
+#define MOD     "MOD"
 #define MUL     "*"
 #define NEG     "0<"
 #define NOT     "NOT"

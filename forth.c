@@ -54,24 +54,29 @@ typedef void (*OpFunc2)(Stack *s, int *m);
 /*
  *  Operators
  */
+
+/* ADD */
 void op_add(Stack *s) {
     int b = pop(s);
     int a = pop(s);
     push(s, a + b);
 }
 
+/* SUB */
 void op_sub(Stack *s) {
     int b = pop(s);
     int a = pop(s);
     push(s, a - b);
 }
 
+/* MUL */
 void op_mul(Stack *s) {
     int b = pop(s);
     int a = pop(s);
     push(s, a * b);
 }
 
+/* DIV */
 void op_div(Stack *s) {
     int b = pop(s);
     int a = pop(s);
@@ -80,6 +85,17 @@ void op_div(Stack *s) {
         exit(EXIT_FAILURE);
     }
     push(s, a / b);
+}
+
+/* MOD */
+void op_mod(Stack *s) {
+    int b = pop(s);
+    int a = pop(s);
+    if (b == 0) {
+        printf("Modulo by zero!\n");
+        exit(1);
+    }
+    push(s, a % b);
 }
 
 /* DUP */
@@ -377,39 +393,40 @@ typedef struct {
 } DictEntry;
 
 DictEntry dictionary[] = {
-    {   PLUS, OP_0, {.f_s       = op_add            } },
-    {    MIN, OP_0, {.f_s       = op_sub            } },
-    {    MUL, OP_0, {.f_s       = op_mul            } },
-    {    DIV, OP_0, {.f_s       = op_div            } },
-    {    DUP, OP_0, {.f_s       = op_dup            } },
-    {   DROP, OP_0, {.f_s       = op_drop           } },
-    {   SWAP, OP_0, {.f_s       = op_swap           } },
-    {    ROT, OP_0, {.f_s       = op_rot            } },
-    {  FETCH, OP_2, {.f_s_m     = op_fetch          } },
-    {  STORE, OP_2, {.f_s_m     = op_store          } },
-    {   OVER, OP_0, {.f_s       = op_over           } },
-    {   PICK, OP_0, {.f_s       = op_pick           } },
-    {  DEPTH, OP_0, {.f_s       = op_depth          } },
-    {   ROLL, OP_0, {.f_s       = op_roll           } },
-    {    TOR, OP_1, {.f_s_rs    = op_to_r           } },
-    {  RFROM, OP_1, {.f_s_rs    = op_r_from         } },
-    { RFETCH, OP_1, {.f_s_rs    = op_r_fetch        } },
-    {    NOT, OP_0, {.f_s       = op_not            } },
-    {     LT, OP_0, {.f_s       = op_less_than      } }, 
-    {     EQ, OP_0, {.f_s       = op_equal          } }, 
-    {     GT, OP_0, {.f_s       = op_greater_than   } }, 
-    {   ZERO, OP_0, {.f_s       = op_zero_equal     } },
-    {    NEG, OP_0, {.f_s       = op_zero_less      } },
-    {    POS, OP_0, {.f_s       = op_zero_greater   } },
-    {   EMIT, OP_0, {.f_s       = op_emit           } },
-    {  SPACE, OP,   {.f         = op_space          } },
-    {     CR, OP,   {.f         = op_cr             } },
-    { SPACES, OP_0, {.f_s       = op_spaces         } },
-    {  COUNT, OP_2, {.f_s_m     = op_count          } },
-    {   TYPE, OP_2, {.f_s_m     = op_type           } },    
-    {   EXIT, OP,   {.f         = op_exit           } },
-    {  PRINT, OP_0, {.f_s       = op_print          } },
-    {   NULL, OP_0, {NULL                           } }
+/* OPERATOR */     {   PLUS, OP_0, {.f_s       = op_add            } },
+/* OPERATOR */     {    MIN, OP_0, {.f_s       = op_sub            } },
+/* OPERATOR */     {    MUL, OP_0, {.f_s       = op_mul            } },
+/* OPERATOR */     {    DIV, OP_0, {.f_s       = op_div            } },
+/* OPERATOR */     {    MOD, OP_0, {.f_s       = op_mod            } },
+/* STACK */        {    DUP, OP_0, {.f_s       = op_dup            } },
+/* STACK */        {   DROP, OP_0, {.f_s       = op_drop           } },
+/* STACK */        {   SWAP, OP_0, {.f_s       = op_swap           } },
+/* STACK */        {    ROT, OP_0, {.f_s       = op_rot            } },
+/* STACK */        {  FETCH, OP_2, {.f_s_m     = op_fetch          } },
+/* STACK */        {  STORE, OP_2, {.f_s_m     = op_store          } },
+/* STACK */        {   OVER, OP_0, {.f_s       = op_over           } },
+/* STACK */        {   PICK, OP_0, {.f_s       = op_pick           } },
+/* STACK */        {  DEPTH, OP_0, {.f_s       = op_depth          } },
+/* STACK */        {   ROLL, OP_0, {.f_s       = op_roll           } },
+/* STACK */        {    TOR, OP_1, {.f_s_rs    = op_to_r           } },
+/* STACK */        {  RFROM, OP_1, {.f_s_rs    = op_r_from         } },
+/* STACK */        { RFETCH, OP_1, {.f_s_rs    = op_r_fetch        } },
+/* COMPARE */      {    NOT, OP_0, {.f_s       = op_not            } },
+/* COMPARE */      {     LT, OP_0, {.f_s       = op_less_than      } }, 
+/* COMPARE */      {     EQ, OP_0, {.f_s       = op_equal          } }, 
+/* COMPARE */      {     GT, OP_0, {.f_s       = op_greater_than   } }, 
+/* COMPARE */      {   ZERO, OP_0, {.f_s       = op_zero_equal     } },
+/* COMPARE */      {    NEG, OP_0, {.f_s       = op_zero_less      } },
+/* COMPARE */      {    POS, OP_0, {.f_s       = op_zero_greater   } },
+/* IO */           {   EMIT, OP_0, {.f_s       = op_emit           } },
+/* IO */           {  SPACE, OP,   {.f         = op_space          } },
+/* IO */           {     CR, OP,   {.f         = op_cr             } },
+/* IO */           { SPACES, OP_0, {.f_s       = op_spaces         } },
+/* IO */           {  COUNT, OP_2, {.f_s_m     = op_count          } },
+/* IO */           {   TYPE, OP_2, {.f_s_m     = op_type           } },    
+/* PSEUDO */       {   EXIT, OP,   {.f         = op_exit           } },
+                   {  PRINT, OP_0, {.f_s       = op_print          } },
+/* SENTINEL */     {   NULL, OP_0, {NULL                           } }
 }; 
  
 DictEntry *find_entry(const char *word) {
