@@ -186,7 +186,7 @@ void op_to_r(Stack *s, Stack *rs) {
         exit(1);
     }
     int value = pop(s);
-    push(&return_stack, value);
+    push(rs, value);
 }
 
 /* R> -> R FROM */
@@ -195,7 +195,7 @@ void op_r_from(Stack *s, Stack *rs) {
         printf("Return stack underflow for R>!\n");
         exit(1);
     }
-    int value = pop(&return_stack);
+    int value = pop(rs);
     push(s, value);
 }
 
