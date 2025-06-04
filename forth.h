@@ -27,6 +27,7 @@
 #define TOR     ">R"
 #define ZERO    "0="
 #define EXIT    "EXIT"
+#define EMIT    "EMIT"
 
 #endif
 

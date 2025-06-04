@@ -252,6 +252,22 @@ void op_not(Stack *s, Stack *rs) {
     push(s, ~a);
 }
 
+/* EMIT */
+void op_emit(Stack *s, Stack *rs) {
+    int value = pop(s);
+    if (value < 0 || value > 255) {
+        printf("Invalid EMIT value: %d\n", value);
+        exit(1);
+    }
+    putchar(value);
+    fflush(stdout); 
+}
+
+/* EXIT -- pseudo command */
+void op_exit(Stack *s, Stack *rs) {
+    exit(1);
+}
+
 /* . -> print and remove */
 void op_print(Stack *s, Stack *rs) {
     printf("%d\n", pop(s));
@@ -312,6 +328,8 @@ DictEntry dictionary[] = {
     {  ZERO, op_zero_equal  },
     {   NEG, op_zero_less   },
     {   POS, op_zero_greater},
+    {  EMIT, op_emit        },
+    {  EXIT, op_exit        },
     { PRINT, op_print       },
     {  NULL, NULL           }    
 };
