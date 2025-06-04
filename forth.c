@@ -18,7 +18,7 @@ typedef struct {
 void push(Stack *s, int value) {
     if (s->top >= STACK_SIZE) {
         printf("Stack overflow!\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     s->data[s->top++] = value;
 }
@@ -26,7 +26,7 @@ void push(Stack *s, int value) {
 int pop(Stack *s) {
     if (s->top == 0) {
         printf("Stack underflow!\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     return s->data[--s->top];
 }
@@ -34,7 +34,7 @@ int pop(Stack *s) {
 int peek(Stack *s) {
     if (s->top == 0) {
         printf("Stack empty!\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     return s->data[s->top - 1];
 }
@@ -106,12 +106,12 @@ void op_rot(Stack *s) {
         printf("Stack underflow for ROT!\n");
         exit(EXIT_FAILURE);
     }
-    int c = pop(s);     // Top
-    int b = pop(s);     // Second
-    int a = pop(s);     // Third
-    push(s, b);         // Now top is B
-    push(s, c);         // Now top is C
-    push(s, a);         // A goes on top
+    int c = pop(s);    
+    int b = pop(s);     
+    int a = pop(s);     
+    push(s, b);         
+    push(s, c);         
+    push(s, a);        
 }
 
 /* ! -> store to memory address */
