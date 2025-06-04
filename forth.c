@@ -56,25 +56,25 @@ typedef void (*OpFunc2)(Stack *s, Stack *rs, int param);
 /*
  *  Operators
  */
-void op_add(Stack *s, Stack *rs) {
+void op_add(Stack *s) {
     int b = pop(s);
     int a = pop(s);
     push(s, a + b);
 }
 
-void op_sub(Stack *s, Stack *rs) {
+void op_sub(Stack *s) {
     int b = pop(s);
     int a = pop(s);
     push(s, a - b);
 }
 
-void op_mul(Stack *s, Stack *rs) {
+void op_mul(Stack *s) {
     int b = pop(s);
     int a = pop(s);
     push(s, a * b);
 }
 
-void op_div(Stack *s, Stack *rs) {
+void op_div(Stack *s) {
     int b = pop(s);
     int a = pop(s);
     if (b == 0) {
@@ -85,17 +85,17 @@ void op_div(Stack *s, Stack *rs) {
 }
 
 /* DUP */
-void op_dup(Stack *s,Stack *rs) {
+void op_dup(Stack *s) {
     push(s, peek(s));
 }
 
 /* DROP */
-void op_drop(Stack *s, Stack *rs) {
+void op_drop(Stack *s) {
     pop(s);
 }
 
 /* SWAP */
-void op_swap(Stack *s, Stack *rs) {
+void op_swap(Stack *s) {
     int a = pop(s);
     int b = pop(s);
     push(s, a);
@@ -103,7 +103,7 @@ void op_swap(Stack *s, Stack *rs) {
 }
 
 /* ROT */
-void op_rot(Stack *s, Stack *rs) {
+void op_rot(Stack *s) {
     if (s->top < 3) {
         printf("Stack underflow for ROT!\n");
         exit(1);
@@ -117,7 +117,7 @@ void op_rot(Stack *s, Stack *rs) {
 }
 
 /* ! -> store to memory address */
-void op_store(Stack *s, Stack *rs) {
+void op_store(Stack *s) {
     int addr = pop(s);
     int value = pop(s);
     if (addr < 0 || addr >= MEMORY_SIZE) {
@@ -128,7 +128,7 @@ void op_store(Stack *s, Stack *rs) {
 }
 
 /* @ -> fetch from memory address */
-void op_fetch(Stack *s, Stack *rs) {
+void op_fetch(Stack *s) {
     int addr = pop(s);
     if (addr < 0 || addr >= MEMORY_SIZE) {
         printf("Memory access out of bounds at @\n");
@@ -138,7 +138,7 @@ void op_fetch(Stack *s, Stack *rs) {
 }
 
 /* OVER */
-void op_over(Stack *s, Stack *rs) {
+void op_over(Stack *s) {
     if (s->top < 2) {
         printf("Stack underflow for OVER!\n");
         exit(1);
@@ -148,7 +148,7 @@ void op_over(Stack *s, Stack *rs) {
 }
 
 /* PICK */
-void op_pick(Stack *s, Stack *rs) {
+void op_pick(Stack *s) {
     if (s->top < 1) {
         printf("Stack underflow for PICK!\n");
         exit(1);
@@ -163,12 +163,12 @@ void op_pick(Stack *s, Stack *rs) {
 }
 
 /* DEPTH */
-void op_depth(Stack *s, Stack *rs) {
+void op_depth(Stack *s) {
     push(s, s->top);
 }
 
 /* ROLL */
-void op_roll(Stack *s, Stack *rs) {
+void op_roll(Stack *s) {
     if (s->top < 1) {
         printf("Stack underflow for ROLL!\n");
         exit(1);
@@ -329,16 +329,24 @@ typedef struct {
 } DictEntry;
 
 DictEntry dictionary[] = {
-    { PLUS, OP_1, {.f1 = op_add} },
-    { MIN,  OP_1, {.f1 = op_sub} },
-    { MUL,  OP_1, {.f1 = op_mul} },
-    { DIV,  OP_1, {.f1 = op_div} },
-    { DUP,  OP_1, {.f1 = op_dup} },
-    { DROP, OP_1, {.f1 = op_drop} },
-    { SWAP, OP_1, {.f1 = op_swap} },
-    { ROT,  OP_1, {.f1 = op_rot} },
-    { FETCH,OP_1, {.f1 = op_fetch} },
-    { STORE,OP_1, {.f1 = op_store} },
+    {  PLUS,  OP_0, {.f0 = op_add} },
+    {   MIN,  OP_0, {.f0 = op_sub} },
+    {   MUL,  OP_0, {.f0 = op_mul} },
+    {   DIV,  OP_0, {.f0 = op_div} },
+    {   DUP,  OP_0, {.f0 = op_dup} },
+    {  DROP,  OP_0, {.f0 = op_drop} },
+    {  SWAP,  OP_0, {.f0 = op_swap} },
+    {   ROT,  OP_0, {.f0 = op_rot} },
+    { FETCH,  OP_0, {.f0 = op_fetch} },
+    { STORE,  OP_0, {.f0 = op_store} },
+    {  OVER,  OP_0, {.f0 = op_over} },
+    {  PICK,  OP_0, {.f0 = op_pick} },
+    { DEPTH,  OP_0, {.f0 = op_depth} },
+    {  ROLL,  OP_0, {.f0 = op_roll} },
+    {   TOR,  OP_1, {.f1 = op_to_r} },
+    { RFROM,  OP_1, {.f1 = op_r_from} },
+    {RFETCH,  OP_1, {.f1 = op_r_fetch} },
+
     // ... etc ...
     { NULL, OP_0, {NULL} }
 };
@@ -359,6 +367,7 @@ DictEntry dictionary[] = {
     {  PICK, op_pick        },
     { DEPTH, op_depth       },
     {  ROLL, op_roll        },
+
     {   TOR, op_to_r        },
     { RFROM, op_r_from      },
     {RFETCH, op_r_fetch     },
@@ -387,6 +396,7 @@ DictEntry *find_entry(const char *word) {
     return NULL;
 }
 
+/*
 Operation find_word(const char *word) {
     for (int i = 0; dictionary[i].word != NULL; i++) {
         if (strcmp(dictionary[i].word, word) == 0) {
@@ -395,6 +405,7 @@ Operation find_word(const char *word) {
     }
     return NULL;
 }
+*/
 
 void interpret(Stack *stack, Stack *return_stack, char *line) {
     char *token = strtok(line, " \t\r\n");
