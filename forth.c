@@ -216,6 +216,12 @@ void op_r_fetch(Stack *s, Stack *rs) {
     push(s, value);
 }
 
+/* NOT */
+void op_not(Stack *s) {
+    int a = pop(s);
+    push(s, ~a);
+}
+
 /* LT -> LESS THAN */
 void op_less_than(Stack *s, Stack *rs) {
     int b = pop(s);
@@ -253,12 +259,6 @@ void op_zero_less(Stack *s, Stack *rs) {
 void op_zero_greater(Stack *s, Stack *rs) {
     int a = pop(s);
     push(s, (a > 0) ? -1 : 0);
-}
-
-/* NOT */
-void op_not(Stack *s, Stack *rs) {
-    int a = pop(s);
-    push(s, ~a);
 }
 
 /* EMIT */
@@ -346,6 +346,7 @@ DictEntry dictionary[] = {
     {   TOR,  OP_1, {.f1 = op_to_r} },
     { RFROM,  OP_1, {.f1 = op_r_from} },
     {RFETCH,  OP_1, {.f1 = op_r_fetch} },
+    {   NOT,  OP_0, {.f0 = op_not} },
 
     // ... etc ...
     { NULL, OP_0, {NULL} }
