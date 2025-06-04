@@ -18,6 +18,8 @@ typedef struct {
     int top;
 } Stack;
 
+Stack return_stack = { .top = 0 };
+
 void push(Stack *s, int value) {
     if (s->top >= STACK_SIZE) {
         printf("Stack overflow!\n");
@@ -351,8 +353,6 @@ void interpret(Stack *stack, char *line) {
  */
 int main() {
     Stack stack = { .top = 0 };
-    Stack return_stack = { .top = 0 };
-
     char line[LINE_SIZE];
 
     printf("Diederick's Forth Interpreter (C) - 2025\nType 'exit' to quit.\n");
