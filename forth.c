@@ -13,6 +13,13 @@
 
 int memory[MEMORY_SIZE];
 
+typedef enum {
+    OP_0,   // zero parameters (stack only)
+    OP_1,   // one parameter (stack)
+    OP_2,   // two parameters (stack + return stack)
+    OP_3    // hypothetical: stack + rs + extra param (not used now)
+} OpType;
+
 typedef struct {
     int data[STACK_SIZE];
     int top;
@@ -42,7 +49,9 @@ int peek(Stack *s) {
     return s->data[s->top - 1];
 }
 
-typedef void (*Operation)(Stack *s, Stack *rs);
+typedef void (*OpFunc0)(Stack *s);
+typedef void (*OpFunc1)(Stack *s, Stack *rs);
+typedef void (*OpFunc2)(Stack *s, Stack *rs, int param); 
 
 /*
  *  Operators
@@ -311,10 +320,30 @@ bool is_number(const char *token) {
  */
 typedef struct {
     const char *word;
-    Operation op;
+    OpType type;
+    union {
+        OpFunc0 f0;
+        OpFunc1 f1;
+        OpFunc2 f2;
+    } func;
 } DictEntry;
 
+DictEntry dictionary[] = {
+    { PLUS, OP_1, {.f1 = op_add} },
+    { MIN,  OP_1, {.f1 = op_sub} },
+    { MUL,  OP_1, {.f1 = op_mul} },
+    { DIV,  OP_1, {.f1 = op_div} },
+    { DUP,  OP_1, {.f1 = op_dup} },
+    { DROP, OP_1, {.f1 = op_drop} },
+    { SWAP, OP_1, {.f1 = op_swap} },
+    { ROT,  OP_1, {.f1 = op_rot} },
+    { FETCH,OP_1, {.f1 = op_fetch} },
+    { STORE,OP_1, {.f1 = op_store} },
+    // ... etc ...
+    { NULL, OP_0, {NULL} }
+};
 
+/*
 DictEntry dictionary[] = {
     {  PLUS, op_add         },
     {   MIN, op_sub         },
@@ -347,6 +376,16 @@ DictEntry dictionary[] = {
     { PRINT, op_print       },
     {  NULL, NULL           }    
 };
+*/
+
+DictEntry *find_entry(const char *word) {
+    for (int i = 0; dictionary[i].word != NULL; i++) {
+        if (strcmp(dictionary[i].word, word) == 0) {
+            return &dictionary[i];
+        }
+    }
+    return NULL;
+}
 
 Operation find_word(const char *word) {
     for (int i = 0; dictionary[i].word != NULL; i++) {
@@ -357,9 +396,42 @@ Operation find_word(const char *word) {
     return NULL;
 }
 
+void interpret(Stack *stack, Stack *return_stack, char *line) {
+    char *token = strtok(line, " \t\r\n");
+    while (token != NULL) {
+        to_uppercase(token);
+
+        DictEntry *entry = find_entry(token);
+        if (entry) {
+            switch (entry->type) {
+                case OP_0:
+                    if (entry->func.f0) entry->func.f0(stack);
+                    break;
+                case OP_1:
+                    if (entry->func.f1) entry->func.f1(stack, return_stack);
+                    break;
+                case OP_2:
+                    // future use: entry->func.f2(stack, return_stack, param);
+                    break;
+                default:
+                    printf("Unknown op type\n");
+                    exit(1);
+            }
+        } else if (is_number(token)) {
+            push(stack, atoi(token));
+        } else {
+            printf("Unknown word: %s\n", token);
+        }
+
+        token = strtok(NULL, " \t\r\n");
+    }
+}
+
+
 /*
  *  Tokenisation
  */
+ /*
 void interpret(Stack *stack, Stack *return_stack, char *line) {
     char *token = strtok(line, " \t\r\n");
     while (token != NULL) {
@@ -377,6 +449,7 @@ void interpret(Stack *stack, Stack *return_stack, char *line) {
         token = strtok(NULL, " \t\r\n");
     }
 }
+    */
 
 /*
  *  Main
