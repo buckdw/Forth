@@ -1,19 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-#include <stdbool.h>
-
 #include "forth.h"
 
-#define STACK_SIZE 16384
-#define LINE_SIZE 256
-#define MEMORY_SIZE 16384
-
-typedef struct {
-    int data[STACK_SIZE];
-    int top;
-} Stack;
 
 void push(Stack *s, int value) {
     if (s->top >= STACK_SIZE) {
@@ -38,22 +24,6 @@ int peek(Stack *s) {
     }
     return s->data[s->top - 1];
 }
-
-typedef enum {
-    OP,     // f()
-    OP_0,   // f(Stack *s)
-    OP_1,   // f(Stack *s, Stack *rs)
-    OP_2,   // f(Stack *s, int *m)
-} OpType;
-
-typedef void (*OpFunc)();
-typedef void (*OpFunc0)(Stack *s);
-typedef void (*OpFunc1)(Stack *s, Stack *rs);
-typedef void (*OpFunc2)(Stack *s, int *m); 
-
-/*
- *  Operators
- */
 
 /* ADD */
 void op_add(Stack *s) {
@@ -403,20 +373,6 @@ bool is_number(const char *token) {
     }
     return true;
 }
-
-/*
- *  Support structures and function lookup table
- */
-typedef struct {
-    const char *word;
-    OpType type;
-    union {
-        OpFunc  f;
-        OpFunc0 f_s;
-        OpFunc1 f_s_rs;
-        OpFunc2 f_s_m;
-    } func;
-} DictEntry;
 
 DictEntry dictionary[] = {
 /* OPERATOR */     {     PLUS, OP_0, {.f_s       = op_add            } },

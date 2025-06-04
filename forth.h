@@ -1,6 +1,52 @@
 #ifndef FORTH_H_
 #define FORTH_H_
 
+/*
+ * Project:      Diederick's Forth Interpreter
+ * Description:  Forth interpreter main logic
+ * Author:       Diederick
+ * Created:      2025-06-04
+ * License:      MIT
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdbool.h>
+
+#define STACK_SIZE 16384
+#define LINE_SIZE 256
+#define MEMORY_SIZE 16384
+
+typedef struct {
+    int data[STACK_SIZE];
+    int top;
+} Stack;
+
+typedef enum {
+    OP,     // f()
+    OP_0,   // f(Stack *s)
+    OP_1,   // f(Stack *s, Stack *rs)
+    OP_2    // f(Stack *s, int *m)
+} OpType;
+
+typedef void (*OpFunc)();
+typedef void (*OpFunc0)(Stack *s);
+typedef void (*OpFunc1)(Stack *s, Stack *rs);
+typedef void (*OpFunc2)(Stack *s, int *m); 
+
+typedef struct {
+    const char *word;
+    OpType type;
+    union {
+        OpFunc  f;
+        OpFunc0 f_s;
+        OpFunc1 f_s_rs;
+        OpFunc2 f_s_m;
+    } func;
+} DictEntry;
+
 #define ABS      "ABS"
 #define COUNT    "COUNT"
 #define CR       "CR"
