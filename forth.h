@@ -26,6 +26,7 @@
 #define SWAP    "SWAP"
 #define TOR     ">R"
 #define ZERO    "0="
+#define EXIT    "EXIT"
 
 #endif
 

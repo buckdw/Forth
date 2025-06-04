@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdbool.h>
+
 #include "forth.h"
 
 #define STACK_SIZE 16384
@@ -15,8 +17,6 @@ typedef struct {
     int data[STACK_SIZE];
     int top;
 } Stack;
-
-Stack return_stack = { .top = 0 };
 
 void push(Stack *s, int value) {
     if (s->top >= STACK_SIZE) {
@@ -265,17 +265,17 @@ void op_print(Stack *s) {
         *str = toupper(*str);
 }
 
-int is_number(const char *token) {
+bool is_number(const char *token) {
     if (*token == '-' || *token == '+') 
         token++;
     if (!*token) 
-        return 0;
+        return false;
     while (*token) {
         if (!isdigit(*token)) 
-            return 0;
+            return false;
         token++;
     }
-    return 1;
+    return true;
 }
 
 /*
@@ -351,15 +351,17 @@ void interpret(Stack *stack, char *line) {
  */
 int main() {
     Stack stack = { .top = 0 };
+    Stack return_stack = { .top = 0 };
+
     char line[LINE_SIZE];
 
     printf("Diederick's Forth Interpreter (C) - 2025\nType 'exit' to quit.\n");
 
-    while (1) {
+    while (true) {
         printf("> ");
         if (!fgets(line, LINE_SIZE, stdin)) 
             break;
-        if (strncmp(line, "exit", 4) == 0) 
+        if (strncmp(line, EXIT, 4) == 0) 
             break;
         interpret(&stack, line);
 
