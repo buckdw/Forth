@@ -5,7 +5,9 @@
 #define DIV     "/"
 #define DROP    "DROP"
 #define DUP     "DUP"
+#define EMIT    "EMIT"
 #define EQ      "="
+#define EXIT    "EXIT"
 #define FETCH   "@"
 #define GT      ">"
 #define LT      "<"
@@ -22,12 +24,12 @@
 #define RFROM   "R>"
 #define ROLL    "ROLL"
 #define ROT     "ROT"
+#define SPACE   "SPACE"
 #define STORE   "!"
 #define SWAP    "SWAP"
 #define TOR     ">R"
 #define ZERO    "0="
-#define EXIT    "EXIT"
-#define EMIT    "EMIT"
+#define CR      "CR"
 
 #endif
 

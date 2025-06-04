@@ -263,6 +263,18 @@ void op_emit(Stack *s, Stack *rs) {
     fflush(stdout); 
 }
 
+/* SPACE */
+void op_space(Stack *s, Stack *rs) {
+    putchar(' ');
+    fflush(stdout);
+}
+
+/* CR */
+void op_cr(Stack *s, Stack *rs) {
+    putchar('\n');
+    fflush(stdout);
+}
+
 /* EXIT -- pseudo command */
 void op_exit(Stack *s, Stack *rs) {
     exit(1);
@@ -329,6 +341,8 @@ DictEntry dictionary[] = {
     {   NEG, op_zero_less   },
     {   POS, op_zero_greater},
     {  EMIT, op_emit        },
+    { SPACE, op_space       },
+    {    CR, op_cr          },
     {  EXIT, op_exit        },
     { PRINT, op_print       },
     {  NULL, NULL           }    
@@ -381,7 +395,7 @@ int main() {
             break;
         interpret(&stack, &return_stack, line);
 
-        printf("Stack: ");
+        printf("\nStack: ");
         for (int i = 0; i < stack.top; i++) {
             printf("%d ", stack.data[i]);
         }
