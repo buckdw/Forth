@@ -77,7 +77,7 @@ void op_div(Stack *s) {
     int a = pop(s);
     if (b == 0) {
         printf("Division by zero!\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     push(s, a / b);
 }
@@ -104,7 +104,7 @@ void op_swap(Stack *s) {
 void op_rot(Stack *s) {
     if (s->top < 3) {
         printf("Stack underflow for ROT!\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     int c = pop(s);     // Top
     int b = pop(s);     // Second
@@ -120,7 +120,7 @@ void op_store(Stack *s, int *m) {
     int value = pop(s);
     if (addr < 0 || addr >= MEMORY_SIZE) {
         printf("Memory access out of bounds at !\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     m[addr] = value;
 }
@@ -130,7 +130,7 @@ void op_fetch(Stack *s, int *m) {
     int addr = pop(s);
     if (addr < 0 || addr >= MEMORY_SIZE) {
         printf("Memory access out of bounds at @\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     push(s, m[addr]);
 }
@@ -139,7 +139,7 @@ void op_fetch(Stack *s, int *m) {
 void op_over(Stack *s) {
     if (s->top < 2) {
         printf("Stack underflow for OVER!\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     int x = s->data[s->top - 2];
     push(s, x);
@@ -149,12 +149,12 @@ void op_over(Stack *s) {
 void op_pick(Stack *s) {
     if (s->top < 1) {
         printf("Stack underflow for PICK!\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     int n = pop(s);  // the index
     if (n < 0 || n >= s->top) {
         printf("Invalid PICK index: %d\n", n);
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     int value = s->data[s->top - 1 - n];
     push(s, value);
@@ -169,12 +169,12 @@ void op_depth(Stack *s) {
 void op_roll(Stack *s) {
     if (s->top < 1) {
         printf("Stack underflow for ROLL!\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     int n = pop(s);  // depth to roll
     if (n < 0 || n >= s->top) {
         printf("Invalid ROLL index: %d\n", n);
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     int index = s->top - 1 - n;
     int value = s->data[index];
@@ -188,7 +188,7 @@ void op_roll(Stack *s) {
 void op_to_r(Stack *s, Stack *rs) {
     if (s->top == 0) {
         printf("Stack underflow for >R!\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     int value = pop(s);
     push(rs, value);
@@ -198,7 +198,7 @@ void op_to_r(Stack *s, Stack *rs) {
 void op_r_from(Stack *s, Stack *rs) {
     if (rs->top == 0) {
         printf("Return stack underflow for R>!\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     int value = pop(rs);
     push(s, value);
@@ -208,7 +208,7 @@ void op_r_from(Stack *s, Stack *rs) {
 void op_r_fetch(Stack *s, Stack *rs) {
     if (rs->top == 0) {
         printf("Return stack empty for R@!\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     int value = rs->data[rs->top - 1];
     push(s, value);
@@ -264,7 +264,7 @@ void op_emit(Stack *s) {
     int value = pop(s);
     if (value < 0 || value > 255) {
         printf("Invalid EMIT value: %d\n", value);
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     putchar(value);
     fflush(stdout); 
@@ -284,7 +284,7 @@ void op_cr() {
 
 /* EXIT -- pseudo command */
 void op_exit() {
-    exit(1);
+    exit(EXIT_SUCCESS);
 }
 
 /* . -> print and remove */
@@ -321,43 +321,43 @@ typedef struct {
     OpType type;
     union {
         OpFunc  f;
-        OpFunc0 f0;
-        OpFunc1 f1;
-        OpFunc2 f2;
+        OpFunc0 f_s;
+        OpFunc1 f_s_rs;
+        OpFunc2 f_s_m;
     } func;
 } DictEntry;
 
 DictEntry dictionary[] = {
-    {  PLUS, OP_0, {.f0 = op_add            } },
-    {   MIN, OP_0, {.f0 = op_sub            } },
-    {   MUL, OP_0, {.f0 = op_mul            } },
-    {   DIV, OP_0, {.f0 = op_div            } },
-    {   DUP, OP_0, {.f0 = op_dup            } },
-    {  DROP, OP_0, {.f0 = op_drop           } },
-    {  SWAP, OP_0, {.f0 = op_swap           } },
-    {   ROT, OP_0, {.f0 = op_rot            } },
-    { FETCH, OP_2, {.f2 = op_fetch          } },
-    { STORE, OP_2, {.f2 = op_store          } },
-    {  OVER, OP_0, {.f0 = op_over           } },
-    {  PICK, OP_0, {.f0 = op_pick           } },
-    { DEPTH, OP_0, {.f0 = op_depth          } },
-    {  ROLL, OP_0, {.f0 = op_roll           } },
-    {   TOR, OP_1, {.f1 = op_to_r           } },
-    { RFROM, OP_1, {.f1 = op_r_from         } },
-    {RFETCH, OP_1, {.f1 = op_r_fetch        } },
-    {   NOT, OP_0, {.f0 = op_not            } },
-    {    LT, OP_0, {.f0 = op_less_than      } }, 
-    {    EQ, OP_0, {.f0 = op_equal          } }, 
-    {    GT, OP_0, {.f0 = op_greater_than   } }, 
-    {  ZERO, OP_0, {.f0 = op_zero_equal     } },
-    {   NEG, OP_0, {.f0 = op_zero_less      } },
-    {   POS, OP_0, {.f0 = op_zero_greater   } },
-    {  EMIT, OP_0, {.f0 = op_emit           } },
-    { SPACE, OP,   { .f = op_space          } },
-    {    CR, OP,   { .f = op_cr             } },
-    {  EXIT, OP,   { .f = op_exit           } },
-    { PRINT, OP_0, {.f0 = op_print          } },
-    {  NULL, OP_0, {NULL                    } }
+    {  PLUS, OP_0, {.f_s = op_add            } },
+    {   MIN, OP_0, {.f_s = op_sub            } },
+    {   MUL, OP_0, {.f_s = op_mul            } },
+    {   DIV, OP_0, {.f_s = op_div            } },
+    {   DUP, OP_0, {.f_s = op_dup            } },
+    {  DROP, OP_0, {.f_s = op_drop           } },
+    {  SWAP, OP_0, {.f_s = op_swap           } },
+    {   ROT, OP_0, {.f_s = op_rot            } },
+    { FETCH, OP_2, {.f_s_m = op_fetch        } },
+    { STORE, OP_2, {.f_s_m = op_store        } },
+    {  OVER, OP_0, {.f_s = op_over           } },
+    {  PICK, OP_0, {.f_s = op_pick           } },
+    { DEPTH, OP_0, {.f_s = op_depth          } },
+    {  ROLL, OP_0, {.f_s = op_roll           } },
+    {   TOR, OP_1, {.f_s_rs = op_to_r        } },
+    { RFROM, OP_1, {.f_s_rs = op_r_from      } },
+    {RFETCH, OP_1, {.f_s_rs = op_r_fetch     } },
+    {   NOT, OP_0, {.f_s = op_not            } },
+    {    LT, OP_0, {.f_s = op_less_than      } }, 
+    {    EQ, OP_0, {.f_s = op_equal          } }, 
+    {    GT, OP_0, {.f_s = op_greater_than   } }, 
+    {  ZERO, OP_0, {.f_s = op_zero_equal     } },
+    {   NEG, OP_0, {.f_s = op_zero_less      } },
+    {   POS, OP_0, {.f_s = op_zero_greater   } },
+    {  EMIT, OP_0, {.f_s = op_emit           } },
+    { SPACE, OP,   {.f = op_space            } },
+    {    CR, OP,   {.f = op_cr               } },
+    {  EXIT, OP,   {.f = op_exit             } },
+    { PRINT, OP_0, {.f_s = op_print          } },
+    {  NULL, OP_0, {NULL                     } }
 };
 
 DictEntry *find_entry(const char *word) {
@@ -382,20 +382,20 @@ void interpret(Stack *stack, Stack *return_stack, int *memory, char *line) {
                         entry->func.f();
                     break;
                 case OP_0:
-                    if (entry->func.f0) 
-                        entry->func.f0(stack);
+                    if (entry->func.f_s) 
+                        entry->func.f_s(stack);
                     break;
                 case OP_1:
-                    if (entry->func.f1) 
-                        entry->func.f1(stack, return_stack);
+                    if (entry->func.f_s_rs) 
+                        entry->func.f_s_rs(stack, return_stack);
                     break;
                 case OP_2:
-                    if (entry->func.f2) 
-                        entry->func.f2(stack, memory);                    
+                    if (entry->func.f_s_m) 
+                        entry->func.f_s_m(stack, memory);                    
                     break;
                 default:
                     printf("Unknown op type\n");
-                    exit(1);
+                    exit(EXIT_FAILURE);
             }
         } else if (is_number(token)) {
             push(stack, atoi(token));
@@ -432,5 +432,5 @@ int main() {
         printf("\n");
     }
 
-    return 0;
+    return EXIT_SUCCESS;
 }
