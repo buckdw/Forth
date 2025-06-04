@@ -10,15 +10,6 @@
 #define LINE_SIZE 256
 #define MEMORY_SIZE 16384
 
-int memory[MEMORY_SIZE];
-
-typedef enum {
-    OP_0,   // (stack)
-    OP_1,   // (stack, return_stack)
-    OP_2,   // (stack, memory)
-    OP_3    // hypothetical: stack + rs + extra param (not used now)
-} OpType;
-
 typedef struct {
     int data[STACK_SIZE];
     int top;
@@ -48,6 +39,14 @@ int peek(Stack *s) {
     return s->data[s->top - 1];
 }
 
+typedef enum {
+    OP,     // ()
+    OP_0,   // (stack)
+    OP_1,   // (stack, return_stack)
+    OP_2,   // (stack, memory)
+} OpType;
+
+typedef void (*OpFunc)();
 typedef void (*OpFunc0)(Stack *s);
 typedef void (*OpFunc1)(Stack *s, Stack *rs);
 typedef void (*OpFunc2)(Stack *s, int *m); 
@@ -272,19 +271,19 @@ void op_emit(Stack *s) {
 }
 
 /* SPACE */
-void op_space(Stack *s) {
+void op_space() {
     putchar(' ');
     fflush(stdout);
 }
 
 /* CR */
-void op_cr(Stack *s) {
+void op_cr() {
     putchar('\n');
     fflush(stdout);
 }
 
 /* EXIT -- pseudo command */
-void op_exit(Stack *s) {
+void op_exit() {
     exit(1);
 }
 
@@ -353,9 +352,9 @@ DictEntry dictionary[] = {
     {   NEG, OP_0, {.f0 = op_zero_less      } },
     {   POS, OP_0, {.f0 = op_zero_greater   } },
     {  EMIT, OP_0, {.f0 = op_emit           } },
-    { SPACE, OP_0, {.f0 = op_space          } },
-    {    CR, OP_0, {.f0 = op_cr             } },
-    {  EXIT, OP_0, {.f0 = op_exit           } },
+    { SPACE, OP,   { .f = op_space          } },
+    {    CR, OP,   { .f = op_cr             } },
+    {  EXIT, OP,   { .f = op_exit           } },
     { PRINT, OP_0, {.f0 = op_print          } },
     {  NULL, OP_0, {NULL                    } }
 };
@@ -369,7 +368,7 @@ DictEntry *find_entry(const char *word) {
     return NULL;
 }
 
-void interpret(Stack *stack, Stack *return_stack, char *line) {
+void interpret(Stack *stack, Stack *return_stack, int *memory, char *line) {
     char *token = strtok(line, " \t\r\n");
     while (token != NULL) {
         to_uppercase(token);
@@ -377,6 +376,10 @@ void interpret(Stack *stack, Stack *return_stack, char *line) {
         DictEntry *entry = find_entry(token);
         if (entry) {
             switch (entry->type) {
+                case OP:
+                    if (entry->func.f)
+                        entry->func.f();
+                    break;
                 case OP_0:
                     if (entry->func.f0) 
                         entry->func.f0(stack);
@@ -386,7 +389,8 @@ void interpret(Stack *stack, Stack *return_stack, char *line) {
                         entry->func.f1(stack, return_stack);
                     break;
                 case OP_2:
-                    // future use: entry->func.f2(stack, return_stack, param);
+                    if (entry->func.f2) 
+                        entry->func.f2(stack, memory);                    
                     break;
                 default:
                     printf("Unknown op type\n");
@@ -408,6 +412,7 @@ void interpret(Stack *stack, Stack *return_stack, char *line) {
 int main() {
     Stack stack = { .top = 0 };
     Stack return_stack = { .top = 0};
+    int memory[MEMORY_SIZE];
     char line[LINE_SIZE + 1];
 
     printf("Diederick's Forth Interpreter (C) - 2025)\n")
@@ -417,7 +422,7 @@ int main() {
         printf("> ");
         if (!fgets(line, LINE_SIZE, stdin)) 
             break;
-        interpret(&stack, &return_stack, line);
+        interpret(&stack, &return_stack, memory, line);
 
         printf("\nStack: ");
         for (int i = 0; i < stack.top; i++) {
