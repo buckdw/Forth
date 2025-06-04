@@ -34,6 +34,8 @@
 #define TOR     ">R"
 #define TYPE    "TYPE"
 #define ZERO    "0="
+#define 1PLUS   "1+"
+#define 1MIN    "1-"
 
 #endif
 
