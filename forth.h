@@ -86,5 +86,11 @@ typedef struct {
 #define TYPE     "TYPE"
 #define ZERO     "0="
 
+void push(Stack *s, int value);
+int pop(Stack *s); 
+int peek(Stack *s); 
+void to_uppercase(char *str);
+bool is_number(const char *token);
+
 #endif
 

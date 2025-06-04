@@ -353,10 +353,7 @@ void op_print(Stack *s) {
     printf("%d\n", pop(s));
 }
 
-/*
- *  Helper functions
- */
- void to_uppercase(char *str) {
+void to_uppercase(char *str) {
     for (; *str; ++str) 
         *str = toupper(*str);
 }
