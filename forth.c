@@ -7,7 +7,6 @@
 #include "forth.h"
 
 #define STACK_SIZE 16384
-#define MAX_WORD_LENGTH 32
 #define LINE_SIZE 256
 #define MEMORY_SIZE 16384
 
@@ -409,10 +408,10 @@ void interpret(Stack *stack, Stack *return_stack, char *line) {
 int main() {
     Stack stack = { .top = 0 };
     Stack return_stack = { .top = 0};
+    char line[LINE_SIZE + 1];
 
-    char line[LINE_SIZE];
-
-    printf("Diederick's Forth Interpreter (C) - 2025\nType 'exit' to quit.\n");
+    printf("Diederick's Forth Interpreter (C) - 2025)\n")
+    printf("Type 'exit' to quit.\n");
 
     while (true) {
         printf("> ");
