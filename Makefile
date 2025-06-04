@@ -1,6 +1,6 @@
 # Makefile for Simple Forth Interpreter
 CC = gcc
-CFLAGS = -Wall -Wextra -Wno-unused-parameter -O2
+CFLAGS = -Wall -Wextra -O2
 TARGET = forth
 SRC = forth.c
 
