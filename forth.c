@@ -379,8 +379,6 @@ int main() {
         printf("> ");
         if (!fgets(line, LINE_SIZE, stdin)) 
             break;
-        if (strncmp(line, EXIT, 4) == 0) 
-            break;
         interpret(&stack, &return_stack, line);
 
         printf("Stack: ");
