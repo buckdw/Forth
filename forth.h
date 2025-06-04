@@ -1,6 +1,7 @@
 #ifndef FORTH_H_
 #define FORTH_H_
 
+#define ABS      "ABS"
 #define COUNT    "COUNT"
 #define CR       "CR"
 #define DEPTH    "DEPTH"
@@ -34,6 +35,8 @@
 #define STORE    "!"
 #define SWAP     "SWAP"
 #define TOR      ">R"
+#define TWO_MIN  "2-"
+#define TWO_PLUS "2+"
 #define TYPE     "TYPE"
 #define ZERO     "0="
 

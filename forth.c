@@ -108,6 +108,22 @@ void op_one_minus(Stack *s) {
     push(s, pop(s) - 1);
 }
 
+/* 2+ */
+void op_two_plus(Stack *s) {
+    push(s, pop(s) + 2);
+}
+
+/* 2- */
+void op_two_minus(Stack *s) {
+    push(s, pop(s) - 2);
+}
+
+/* ABS */
+void op_abs(Stack *s) {
+    int a = pop(s);
+    push(s, (a < 0) ? -a : a);
+}
+
 /* DUP */
 void op_dup(Stack *s) {
     push(s, peek(s));
@@ -410,6 +426,9 @@ DictEntry dictionary[] = {
 /* OPERATOR */     {      MOD, OP_0, {.f_s       = op_mod            } },
 /* OPERATOR */     { ONE_PLUS, OP_0, {.f_s       = op_one_plus       } },
 /* OPERATOR */     {  ONE_MIN, OP_0, {.f_s       = op_one_minus      } },
+/* OPERATOR */     { TWO_PLUS, OP_0, {.f_s       = op_two_plus       } },
+/* OPERATOR */     {  TWO_MIN, OP_0, {.f_s       = op_two_minus      } },
+/* OPERATOR */     {      ABS, OP_0, {.f_s       = op_abs            } },
 /* STACK */        {      DUP, OP_0, {.f_s       = op_dup            } },
 /* STACK */        {     DROP, OP_0, {.f_s       = op_drop           } },
 /* STACK */        {     SWAP, OP_0, {.f_s       = op_swap           } },
