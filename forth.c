@@ -223,46 +223,46 @@ void op_not(Stack *s) {
 }
 
 /* LT -> LESS THAN */
-void op_less_than(Stack *s, Stack *rs) {
+void op_less_than(Stack *s) {
     int b = pop(s);
     int a = pop(s);
     push(s, (a < b) ? -1 : 0);
 }
 
 /* EQ -> EQUAL */
-void op_equal(Stack *s, Stack *rs) {
+void op_equal(Stack *s) {
     int b = pop(s);
     int a = pop(s);
     push(s, (a == b) ? -1 : 0);
 }
 
 /* GT -> GREATER THAN */
-void op_greater_than(Stack *s, Stack *rs) {
+void op_greater_than(Stack *s) {
     int b = pop(s);
     int a = pop(s);
     push(s, (a > b) ? -1 : 0);
 }
 
 /* ZERO */
-void op_zero_equal(Stack *s, Stack *rs) {
+void op_zero_equal(Stack *s) {
     int a = pop(s);
     push(s, (a == 0) ? -1 : 0);
 }
 
 /* NEG */
-void op_zero_less(Stack *s, Stack *rs) {
+void op_zero_less(Stack *s) {
     int a = pop(s);
     push(s, (a < 0) ? -1 : 0);
 }
 
 /* POS */
-void op_zero_greater(Stack *s, Stack *rs) {
+void op_zero_greater(Stack *s) {
     int a = pop(s);
     push(s, (a > 0) ? -1 : 0);
 }
 
 /* EMIT */
-void op_emit(Stack *s, Stack *rs) {
+void op_emit(Stack *s) {
     int value = pop(s);
     if (value < 0 || value > 255) {
         printf("Invalid EMIT value: %d\n", value);
@@ -273,24 +273,24 @@ void op_emit(Stack *s, Stack *rs) {
 }
 
 /* SPACE */
-void op_space(Stack *s, Stack *rs) {
+void op_space(Stack *s) {
     putchar(' ');
     fflush(stdout);
 }
 
 /* CR */
-void op_cr(Stack *s, Stack *rs) {
+void op_cr(Stack *s) {
     putchar('\n');
     fflush(stdout);
 }
 
 /* EXIT -- pseudo command */
-void op_exit(Stack *s, Stack *rs) {
+void op_exit(Stack *s) {
     exit(1);
 }
 
 /* . -> print and remove */
-void op_print(Stack *s, Stack *rs) {
+void op_print(Stack *s) {
     printf("%d\n", pop(s));
 }
 
@@ -316,7 +316,7 @@ bool is_number(const char *token) {
 }
 
 /*
- *  Support structures and lookup tables 
+ *  Support structures and function lookup table
  */
 typedef struct {
     const char *word;
@@ -329,64 +329,37 @@ typedef struct {
 } DictEntry;
 
 DictEntry dictionary[] = {
-    {  PLUS,  OP_0, {.f0 = op_add} },
-    {   MIN,  OP_0, {.f0 = op_sub} },
-    {   MUL,  OP_0, {.f0 = op_mul} },
-    {   DIV,  OP_0, {.f0 = op_div} },
-    {   DUP,  OP_0, {.f0 = op_dup} },
-    {  DROP,  OP_0, {.f0 = op_drop} },
-    {  SWAP,  OP_0, {.f0 = op_swap} },
-    {   ROT,  OP_0, {.f0 = op_rot} },
-    { FETCH,  OP_0, {.f0 = op_fetch} },
-    { STORE,  OP_0, {.f0 = op_store} },
-    {  OVER,  OP_0, {.f0 = op_over} },
-    {  PICK,  OP_0, {.f0 = op_pick} },
-    { DEPTH,  OP_0, {.f0 = op_depth} },
-    {  ROLL,  OP_0, {.f0 = op_roll} },
-    {   TOR,  OP_1, {.f1 = op_to_r} },
-    { RFROM,  OP_1, {.f1 = op_r_from} },
-    {RFETCH,  OP_1, {.f1 = op_r_fetch} },
-    {   NOT,  OP_0, {.f0 = op_not} },
-
-    // ... etc ...
-    { NULL, OP_0, {NULL} }
+    {  PLUS, OP_0, {.f0 = op_add            } },
+    {   MIN, OP_0, {.f0 = op_sub            } },
+    {   MUL, OP_0, {.f0 = op_mul            } },
+    {   DIV, OP_0, {.f0 = op_div            } },
+    {   DUP, OP_0, {.f0 = op_dup            } },
+    {  DROP, OP_0, {.f0 = op_drop           } },
+    {  SWAP, OP_0, {.f0 = op_swap           } },
+    {   ROT, OP_0, {.f0 = op_rot            } },
+    { FETCH, OP_0, {.f0 = op_fetch          } },
+    { STORE, OP_0, {.f0 = op_store          } },
+    {  OVER, OP_0, {.f0 = op_over           } },
+    {  PICK, OP_0, {.f0 = op_pick           } },
+    { DEPTH, OP_0, {.f0 = op_depth          } },
+    {  ROLL, OP_0, {.f0 = op_roll           } },
+    {   TOR, OP_1, {.f1 = op_to_r           } },
+    { RFROM, OP_1, {.f1 = op_r_from         } },
+    {RFETCH, OP_1, {.f1 = op_r_fetch        } },
+    {   NOT, OP_0, {.f0 = op_not            } },
+    {    LT, OP_0, {.f0 = op_less_than      } }, 
+    {    EQ, OP_0, {.f0 = op_equal          } }, 
+    {    GT, OP_0, {.f0 = op_greater_than   } }, 
+    {  ZERO, OP_0, {.f0 = op_zero_equal     } },
+    {   NEG, OP_0, {.f0 = op_zero_less      } },
+    {   POS, OP_0, {.f0 = op_zero_greater   } },
+    {  EMIT, OP_0, {.f0 = op_emit           } },
+    { SPACE, OP_0, {.f0 = op_space          } },
+    {    CR, OP_0, {.f0 = op_cr             } },
+    {  EXIT, OP_0, {.f0 = op_exit           } },
+    { PRINT, OP_0, {.f0 = op_print          } },
+    {  NULL, OP_0, {NULL                    } }
 };
-
-/*
-DictEntry dictionary[] = {
-    {  PLUS, op_add         },
-    {   MIN, op_sub         },
-    {   MUL, op_mul         },
-    {   DIV, op_div         },
-    {   DUP, op_dup         },
-    {  DROP, op_drop        },
-    {  SWAP, op_swap        },
-    {   ROT, op_rot         },
-    { FETCH, op_fetch       },
-    { STORE, op_store       },
-    {  OVER, op_over        },
-    {  PICK, op_pick        },
-    { DEPTH, op_depth       },
-    {  ROLL, op_roll        },
-
-    {   TOR, op_to_r        },
-    { RFROM, op_r_from      },
-    {RFETCH, op_r_fetch     },
-    {   NOT, op_not         },
-    {    LT, op_less_than   }, 
-    {    EQ, op_equal       }, 
-    {    GT, op_greater_than}, 
-    {  ZERO, op_zero_equal  },
-    {   NEG, op_zero_less   },
-    {   POS, op_zero_greater},
-    {  EMIT, op_emit        },
-    { SPACE, op_space       },
-    {    CR, op_cr          },
-    {  EXIT, op_exit        },
-    { PRINT, op_print       },
-    {  NULL, NULL           }    
-};
-*/
 
 DictEntry *find_entry(const char *word) {
     for (int i = 0; dictionary[i].word != NULL; i++) {
@@ -397,17 +370,6 @@ DictEntry *find_entry(const char *word) {
     return NULL;
 }
 
-/*
-Operation find_word(const char *word) {
-    for (int i = 0; dictionary[i].word != NULL; i++) {
-        if (strcmp(dictionary[i].word, word) == 0) {
-            return dictionary[i].op;
-        }
-    }
-    return NULL;
-}
-*/
-
 void interpret(Stack *stack, Stack *return_stack, char *line) {
     char *token = strtok(line, " \t\r\n");
     while (token != NULL) {
@@ -417,10 +379,12 @@ void interpret(Stack *stack, Stack *return_stack, char *line) {
         if (entry) {
             switch (entry->type) {
                 case OP_0:
-                    if (entry->func.f0) entry->func.f0(stack);
+                    if (entry->func.f0) 
+                        entry->func.f0(stack);
                     break;
                 case OP_1:
-                    if (entry->func.f1) entry->func.f1(stack, return_stack);
+                    if (entry->func.f1) 
+                        entry->func.f1(stack, return_stack);
                     break;
                 case OP_2:
                     // future use: entry->func.f2(stack, return_stack, param);
@@ -438,30 +402,6 @@ void interpret(Stack *stack, Stack *return_stack, char *line) {
         token = strtok(NULL, " \t\r\n");
     }
 }
-
-
-/*
- *  Tokenisation
- */
- /*
-void interpret(Stack *stack, Stack *return_stack, char *line) {
-    char *token = strtok(line, " \t\r\n");
-    while (token != NULL) {
-        to_uppercase(token);
-
-        Operation op = find_word(token);
-        if (op) {
-            op(stack, return_stack);
-        } else if (is_number(token)) {
-            push(stack, atoi(token));
-        } else {
-            printf("Unknown word: %s\n", token);
-        }
-
-        token = strtok(NULL, " \t\r\n");
-    }
-}
-    */
 
 /*
  *  Main
