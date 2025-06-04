@@ -44,30 +44,30 @@ int peek(Stack *s) {
     return s->data[s->top - 1];
 }
 
-typedef void (*Operation)(Stack *);
+typedef void (*Operation)(Stack *s, Stack *rs);
 
 /*
  *  Operators
  */
-void op_add(Stack *s) {
+void op_add(Stack *s, Stack *rs) {
     int b = pop(s);
     int a = pop(s);
     push(s, a + b);
 }
 
-void op_sub(Stack *s) {
+void op_sub(Stack *s, Stack *rs) {
     int b = pop(s);
     int a = pop(s);
     push(s, a - b);
 }
 
-void op_mul(Stack *s) {
+void op_mul(Stack *s, Stack *rs) {
     int b = pop(s);
     int a = pop(s);
     push(s, a * b);
 }
 
-void op_div(Stack *s) {
+void op_div(Stack *s, Stack *rs) {
     int b = pop(s);
     int a = pop(s);
     if (b == 0) {
@@ -78,17 +78,17 @@ void op_div(Stack *s) {
 }
 
 /* DUP */
-void op_dup(Stack *s) {
+void op_dup(Stack *s,Stack *rs) {
     push(s, peek(s));
 }
 
 /* DROP */
-void op_drop(Stack *s) {
+void op_drop(Stack *s, Stack *rs) {
     pop(s);
 }
 
 /* SWAP */
-void op_swap(Stack *s) {
+void op_swap(Stack *s, Stack *rs) {
     int a = pop(s);
     int b = pop(s);
     push(s, a);
@@ -96,7 +96,7 @@ void op_swap(Stack *s) {
 }
 
 /* ROT */
-void op_rot(Stack *s) {
+void op_rot(Stack *s, Stack *rs) {
     if (s->top < 3) {
         printf("Stack underflow for ROT!\n");
         exit(1);
@@ -110,7 +110,7 @@ void op_rot(Stack *s) {
 }
 
 /* ! -> store to memory address */
-void op_store(Stack *s) {
+void op_store(Stack *s, Stack *rs) {
     int addr = pop(s);
     int value = pop(s);
     if (addr < 0 || addr >= MEMORY_SIZE) {
@@ -121,7 +121,7 @@ void op_store(Stack *s) {
 }
 
 /* @ -> fetch from memory address */
-void op_fetch(Stack *s) {
+void op_fetch(Stack *s, Stack *rs) {
     int addr = pop(s);
     if (addr < 0 || addr >= MEMORY_SIZE) {
         printf("Memory access out of bounds at @\n");
@@ -131,7 +131,7 @@ void op_fetch(Stack *s) {
 }
 
 /* OVER */
-void op_over(Stack *s) {
+void op_over(Stack *s, Stack *rs) {
     if (s->top < 2) {
         printf("Stack underflow for OVER!\n");
         exit(1);
@@ -141,7 +141,7 @@ void op_over(Stack *s) {
 }
 
 /* PICK */
-void op_pick(Stack *s) {
+void op_pick(Stack *s, Stack *rs) {
     if (s->top < 1) {
         printf("Stack underflow for PICK!\n");
         exit(1);
@@ -156,12 +156,12 @@ void op_pick(Stack *s) {
 }
 
 /* DEPTH */
-void op_depth(Stack *s) {
+void op_depth(Stack *s, Stack *rs) {
     push(s, s->top);
 }
 
 /* ROLL */
-void op_roll(Stack *s) {
+void op_roll(Stack *s, Stack *rs) {
     if (s->top < 1) {
         printf("Stack underflow for ROLL!\n");
         exit(1);
@@ -180,7 +180,7 @@ void op_roll(Stack *s) {
 }
 
 /* >R -> TO R */
-void op_to_r(Stack *s) {
+void op_to_r(Stack *s, Stack *rs) {
     if (s->top == 0) {
         printf("Stack underflow for >R!\n");
         exit(1);
@@ -190,7 +190,7 @@ void op_to_r(Stack *s) {
 }
 
 /* R> -> R FROM */
-void op_r_from(Stack *s) {
+void op_r_from(Stack *s, Stack *rs) {
     if (return_stack.top == 0) {
         printf("Return stack underflow for R>!\n");
         exit(1);
@@ -200,62 +200,62 @@ void op_r_from(Stack *s) {
 }
 
 /* R@ -> R FETCH */
-void op_r_fetch(Stack *s) {
-    if (return_stack.top == 0) {
+void op_r_fetch(Stack *s, Stack *rs) {
+    if (rs->top == 0) {
         printf("Return stack empty for R@!\n");
         exit(1);
     }
-    int value = return_stack.data[return_stack.top - 1];
+    int value = rs->data[rs->top - 1];
     push(s, value);
 }
 
 /* LT -> LESS THAN */
-void op_less_than(Stack *s) {
+void op_less_than(Stack *s, Stack *rs) {
     int b = pop(s);
     int a = pop(s);
     push(s, (a < b) ? -1 : 0);
 }
 
 /* EQ -> EQUAL */
-void op_equal(Stack *s) {
+void op_equal(Stack *s, Stack *rs) {
     int b = pop(s);
     int a = pop(s);
     push(s, (a == b) ? -1 : 0);
 }
 
 /* GT -> GREATER THAN */
-void op_greater_than(Stack *s) {
+void op_greater_than(Stack *s, Stack *rs) {
     int b = pop(s);
     int a = pop(s);
     push(s, (a > b) ? -1 : 0);
 }
 
 /* ZERO */
-void op_zero_equal(Stack *s) {
+void op_zero_equal(Stack *s, Stack *rs) {
     int a = pop(s);
     push(s, (a == 0) ? -1 : 0);
 }
 
 /* NEG */
-void op_zero_less(Stack *s) {
+void op_zero_less(Stack *s, Stack *rs) {
     int a = pop(s);
     push(s, (a < 0) ? -1 : 0);
 }
 
 /* POS */
-void op_zero_greater(Stack *s) {
+void op_zero_greater(Stack *s, Stack *rs) {
     int a = pop(s);
     push(s, (a > 0) ? -1 : 0);
 }
 
 /* NOT */
-void op_not(Stack *s) {
+void op_not(Stack *s, Stack *rs) {
     int a = pop(s);
     push(s, ~a);
 }
 
 /* . -> print and remove */
-void op_print(Stack *s) {
+void op_print(Stack *s, Stack *rs) {
     printf("%d\n", pop(s));
 }
 
@@ -330,14 +330,14 @@ Operation find_word(const char *word) {
 /*
  *  Tokenisation
  */
-void interpret(Stack *stack, char *line) {
+void interpret(Stack *stack, Stack *return_stack, char *line) {
     char *token = strtok(line, " \t\r\n");
     while (token != NULL) {
         to_uppercase(token);
 
         Operation op = find_word(token);
         if (op) {
-            op(stack);
+            op(stack, return_stack);
         } else if (is_number(token)) {
             push(stack, atoi(token));
         } else {
@@ -353,6 +353,8 @@ void interpret(Stack *stack, char *line) {
  */
 int main() {
     Stack stack = { .top = 0 };
+    Stack return_stack = { .top = 0};
+
     char line[LINE_SIZE];
 
     printf("Diederick's Forth Interpreter (C) - 2025\nType 'exit' to quit.\n");
@@ -363,7 +365,7 @@ int main() {
             break;
         if (strncmp(line, EXIT, 4) == 0) 
             break;
-        interpret(&stack, line);
+        interpret(&stack, &return_stack, line);
 
         printf("Stack: ");
         for (int i = 0; i < stack.top; i++) {
