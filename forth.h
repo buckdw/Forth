@@ -86,9 +86,54 @@ typedef struct {
 #define TYPE     "TYPE"
 #define ZERO     "0="
 
+/* internal */
 void push(Stack *s, int value);
 int pop(Stack *s); 
 int peek(Stack *s); 
+
+/* operations */
+void op_add(Stack *s);
+void op_sub(Stack *s);
+void op_mul(Stack *s);
+void op_div(Stack *s);
+void op_mod(Stack *s);
+void op_one_plus(Stack *s);
+void op_one_minus(Stack *s);
+void op_two_plus(Stack *s);
+void op_two_minus(Stack *s);
+void op_abs(Stack *s);
+void op_dup(Stack *s);
+void op_drop(Stack *s);
+void op_swap(Stack *s);
+void op_rot(Stack *s);
+void op_store(Stack *s, int *m);
+void op_fetch(Stack *s, int *m);
+void op_over(Stack *s);
+void op_pick(Stack *s);
+void op_depth(Stack *s);
+void op_roll(Stack *s);
+void op_to_r(Stack *s, Stack *rs);
+void op_r_from(Stack *s, Stack *rs);
+void op_r_fetch(Stack *s, Stack *rs);
+void op_not(Stack *s);
+void op_less_than(Stack *s);
+void op_equal(Stack *s);
+void op_greater_than(Stack *s);
+void op_zero_equal(Stack *s);
+void op_zero_less(Stack *s);
+void op_zero_greater(Stack *s);
+void op_emit(Stack *s);
+void op_space();
+void op_cr();
+void op_spaces(Stack *s);
+void op_count(Stack *s, int *m);
+void op_type(Stack *s, int *m);
+void op_print(Stack *s);
+
+/* pseudo operation */
+void op_exit();
+
+/* helpers */
 void to_uppercase(char *str);
 bool is_number(const char *token);
 
