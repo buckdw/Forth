@@ -372,45 +372,45 @@ bool is_number(const char *token) {
 }
 
 DictEntry dictionary[] = {
-/* OPERATOR */     {     PLUS, OP_0, {.f_s       = op_add            } },
-/* OPERATOR */     {      MIN, OP_0, {.f_s       = op_sub            } },
-/* OPERATOR */     {      MUL, OP_0, {.f_s       = op_mul            } },
-/* OPERATOR */     {      DIV, OP_0, {.f_s       = op_div            } },
-/* OPERATOR */     {      MOD, OP_0, {.f_s       = op_mod            } },
-/* OPERATOR */     { ONE_PLUS, OP_0, {.f_s       = op_one_plus       } },
-/* OPERATOR */     {  ONE_MIN, OP_0, {.f_s       = op_one_minus      } },
-/* OPERATOR */     { TWO_PLUS, OP_0, {.f_s       = op_two_plus       } },
-/* OPERATOR */     {  TWO_MIN, OP_0, {.f_s       = op_two_minus      } },
-/* OPERATOR */     {      ABS, OP_0, {.f_s       = op_abs            } },
-/* STACK */        {      DUP, OP_0, {.f_s       = op_dup            } },
-/* STACK */        {     DROP, OP_0, {.f_s       = op_drop           } },
-/* STACK */        {     SWAP, OP_0, {.f_s       = op_swap           } },
-/* STACK */        {      ROT, OP_0, {.f_s       = op_rot            } },
-/* STACK */        {    FETCH, OP_2, {.f_s_m     = op_fetch          } },
-/* STACK */        {    STORE, OP_2, {.f_s_m     = op_store          } },
-/* STACK */        {     OVER, OP_0, {.f_s       = op_over           } },
-/* STACK */        {     PICK, OP_0, {.f_s       = op_pick           } },
-/* STACK */        {    DEPTH, OP_0, {.f_s       = op_depth          } },
-/* STACK */        {     ROLL, OP_0, {.f_s       = op_roll           } },
-/* STACK */        {      TOR, OP_1, {.f_s_rs    = op_to_r           } },
-/* STACK */        {    RFROM, OP_1, {.f_s_rs    = op_r_from         } },
-/* STACK */        {   RFETCH, OP_1, {.f_s_rs    = op_r_fetch        } },
-/* COMPARE */      {      NOT, OP_0, {.f_s       = op_not            } },
-/* COMPARE */      {       LT, OP_0, {.f_s       = op_less_than      } }, 
-/* COMPARE */      {       EQ, OP_0, {.f_s       = op_equal          } }, 
-/* COMPARE */      {       GT, OP_0, {.f_s       = op_greater_than   } }, 
-/* COMPARE */      {     ZERO, OP_0, {.f_s       = op_zero_equal     } },
-/* COMPARE */      {      NEG, OP_0, {.f_s       = op_zero_less      } },
-/* COMPARE */      {      POS, OP_0, {.f_s       = op_zero_greater   } },
-/* IO */           {     EMIT, OP_0, {.f_s       = op_emit           } },
-/* IO */           {    SPACE, OP,   {.f         = op_space          } },
-/* IO */           {       CR, OP,   {.f         = op_cr             } },
-/* IO */           {   SPACES, OP_0, {.f_s       = op_spaces         } },
-/* IO */           {    COUNT, OP_2, {.f_s_m     = op_count          } },
-/* IO */           {     TYPE, OP_2, {.f_s_m     = op_type           } },    
-/* PSEUDO */       {     EXIT, OP,   {.f         = op_exit           } },
-                   {    PRINT, OP_0, {.f_s       = op_print          } },
-/* SENTINEL */     {     NULL, OP_0, {NULL                           } }
+/* OPERATOR */     {     PLUS, OP_0, {.fp_s       = op_add            } },
+/* OPERATOR */     {      MIN, OP_0, {.fp_s       = op_sub            } },
+/* OPERATOR */     {      MUL, OP_0, {.fp_s       = op_mul            } },
+/* OPERATOR */     {      DIV, OP_0, {.fp_s       = op_div            } },
+/* OPERATOR */     {      MOD, OP_0, {.fp_s       = op_mod            } },
+/* OPERATOR */     { ONE_PLUS, OP_0, {.fp_s       = op_one_plus       } },
+/* OPERATOR */     {  ONE_MIN, OP_0, {.fp_s       = op_one_minus      } },
+/* OPERATOR */     { TWO_PLUS, OP_0, {.fp_s       = op_two_plus       } },
+/* OPERATOR */     {  TWO_MIN, OP_0, {.fp_s       = op_two_minus      } },
+/* OPERATOR */     {      ABS, OP_0, {.fp_s       = op_abs            } },
+/* STACK */        {      DUP, OP_0, {.fp_s       = op_dup            } },
+/* STACK */        {     DROP, OP_0, {.fp_s       = op_drop           } },
+/* STACK */        {     SWAP, OP_0, {.fp_s       = op_swap           } },
+/* STACK */        {      ROT, OP_0, {.fp_s       = op_rot            } },
+/* STACK */        {    FETCH, OP_2, {.fp_s_m     = op_fetch          } },
+/* STACK */        {    STORE, OP_2, {.fp_s_m     = op_store          } },
+/* STACK */        {     OVER, OP_0, {.fp_s       = op_over           } },
+/* STACK */        {     PICK, OP_0, {.fp_s       = op_pick           } },
+/* STACK */        {    DEPTH, OP_0, {.fp_s       = op_depth          } },
+/* STACK */        {     ROLL, OP_0, {.fp_s       = op_roll           } },
+/* STACK */        {      TOR, OP_1, {.fp_s_rs    = op_to_r           } },
+/* STACK */        {    RFROM, OP_1, {.fp_s_rs    = op_r_from         } },
+/* STACK */        {   RFETCH, OP_1, {.fp_s_rs    = op_r_fetch        } },
+/* COMPARE */      {      NOT, OP_0, {.fp_s       = op_not            } },
+/* COMPARE */      {       LT, OP_0, {.fp_s       = op_less_than      } }, 
+/* COMPARE */      {       EQ, OP_0, {.fp_s       = op_equal          } }, 
+/* COMPARE */      {       GT, OP_0, {.fp_s       = op_greater_than   } }, 
+/* COMPARE */      {     ZERO, OP_0, {.fp_s       = op_zero_equal     } },
+/* COMPARE */      {      NEG, OP_0, {.fp_s       = op_zero_less      } },
+/* COMPARE */      {      POS, OP_0, {.fp_s       = op_zero_greater   } },
+/* IO */           {     EMIT, OP_0, {.fp_s       = op_emit           } },
+/* IO */           {    SPACE, OP,   {.fp         = op_space          } },
+/* IO */           {       CR, OP,   {.fp         = op_cr             } },
+/* IO */           {   SPACES, OP_0, {.fp_s       = op_spaces         } },
+/* IO */           {    COUNT, OP_2, {.fp_s_m     = op_count          } },
+/* IO */           {     TYPE, OP_2, {.fp_s_m     = op_type           } },    
+/* IO */           {    PRINT, OP_0, {.fp_s       = op_print          } },
+/* PSEUDO */       {     EXIT, OP,   {.fp         = op_exit           } },
+/* SENTINEL */     {     NULL, OP_0, {NULL                            } }
 };   
  
 DictEntry *find_entry(const char *word) {
@@ -435,16 +435,16 @@ void interpret(Stack *stack, Stack *return_stack, int *memory, char *line) {
                         entry->func.f();
                     break;
                 case OP_0:
-                    if (entry->func.f_s) 
-                        entry->func.f_s(stack);
+                    if (entry->func.fp_s) 
+                        entry->func.fp_s(stack);
                     break;
                 case OP_1:
-                    if (entry->func.f_s_rs) 
-                        entry->func.f_s_rs(stack, return_stack);
+                    if (entry->func.fp_s_rs) 
+                        entry->func.fp_s_rs(stack, return_stack);
                     break;
                 case OP_2:
-                    if (entry->func.f_s_m) 
-                        entry->func.f_s_m(stack, memory);                    
+                    if (entry->func.fp_s_m) 
+                        entry->func.fp_s_m(stack, memory);                    
                     break;
                 default:
                     printf("Unknown op type\n");

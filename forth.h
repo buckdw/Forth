@@ -40,10 +40,10 @@ typedef struct {
     const char *word;
     OpType type;
     union {
-        OpFunc  f;
-        OpFunc0 f_s;
-        OpFunc1 f_s_rs;
-        OpFunc2 f_s_m;
+        OpFunc  fp;
+        OpFunc0 fp_s;
+        OpFunc1 fp_s_rs;
+        OpFunc2 fp_s_m;
     } func;
 } DictEntry;
 
