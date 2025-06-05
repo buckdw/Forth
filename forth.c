@@ -431,8 +431,8 @@ void interpret(Stack *stack, Stack *return_stack, int *memory, char *line) {
         if (entry) {
             switch (entry->type) {
                 case OP:
-                    if (entry->func.f)
-                        entry->func.f();
+                    if (entry->func.fp)
+                        entry->func.fp();
                     break;
                 case OP_0:
                     if (entry->func.fp_s) 
