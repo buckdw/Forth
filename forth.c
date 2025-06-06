@@ -526,7 +526,7 @@ void interpret(Stack *stack, Stack *return_stack, int *memory, char *line) {
 }
 
 void init_stack(Stack *s) {
-    s->top = 0
+    s->top = 0;
 }
 
 /*

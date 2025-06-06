@@ -150,6 +150,7 @@ void op_exit();
 /* helpers */
 void to_uppercase(char *str);
 bool is_number(const char *token);
+void init_stack(Stack *s);
 
 #endif
 
