@@ -134,7 +134,6 @@ void op_or(Stack *s);
 void op_xor(Stack *s);
 void op_min(Stack *s);
 void op_max(Stack *s);
-
 void op_emit(Stack *s);
 void op_space();
 void op_cr();
