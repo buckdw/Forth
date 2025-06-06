@@ -88,6 +88,22 @@ void op_two_minus(Stack *s) {
     push(s, pop(s) - 2);
 }
 
+/* D+ */
+void op_d_plus(Stack *s) {
+    int d2_high = pop(s);
+    int d2_low  = pop(s);
+    int d1_high = pop(s);
+    int d1_low  = pop(s);
+
+    unsigned int low_sum = (unsigned int)d1_low + (unsigned int)d2_low;
+    int carry = (low_sum < (unsigned int)d1_low); // overflow detection
+
+    int high_sum = d1_high + d2_high + carry;
+
+    push(s, low_sum);
+    push(s, high_sum);
+}
+
 /* ABS */
 void op_abs(Stack *s) {
     int a = pop(s);
@@ -417,6 +433,7 @@ DictEntry dictionary[] = {
 /* OPERATOR */     {  ONE_MIN, OP_0, {.fp_s       = op_one_minus      } },
 /* OPERATOR */     { TWO_PLUS, OP_0, {.fp_s       = op_two_plus       } },
 /* OPERATOR */     {  TWO_MIN, OP_0, {.fp_s       = op_two_minus      } },
+/* OPERATOR */     {    DPLUS, OP_0, {.fp_s       = op_d_plus         } },
 /* OPERATOR */     {      ABS, OP_0, {.fp_s       = op_abs            } },
 /* STACK */        {      DUP, OP_0, {.fp_s       = op_dup            } },
 /* STACK */        {     DROP, OP_0, {.fp_s       = op_drop           } },
