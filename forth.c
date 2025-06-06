@@ -188,24 +188,24 @@ void op_fetch(Stack *s, int *m) {
 }
 
 /* CSTORE -> store a byte */
-void op_cstore(Stack *s, int *m) {
+void op_cstore(Stack *s, uint8_t *m) {
     int addr = pop(s);
     int value = pop(s);
     if (addr < 0 || addr >= MEMORY_SIZE) {
         printf("Memory access out of bounds in C!\n");
         exit(EXIT_FAILURE);
     }
-    m[addr] = value & 0xFF;
+    m[addr] = (uint8_t)(value & 0xFF);
 }
 
 /* CFETCH -> fetch a byte */
-void op_cfetch(Stack *s, int *m) {
+void op_cfetch(Stack *s, uint8_t *m) {
     int addr = pop(s);
     if (addr < 0 || addr >= MEMORY_SIZE) {
         printf("Memory access out of bounds in C@\n");
         exit(EXIT_FAILURE);
     }
-    int byte = m[addr] & 0xFF;
+    uint8_t byte = ((uint8_t *)m)[addr];
     push(s, byte);
 }
 
@@ -513,8 +513,8 @@ DictEntry dictionary[] = {
 /* STACK */        {      ROT, OP_0, {.fp_s       = op_rot            } },
 /* MEMORY */       {    FETCH, OP_2, {.fp_s_m     = op_fetch          } },
 /* MEMORY */       {    STORE, OP_2, {.fp_s_m     = op_store          } },
-/* MEMORY */       {   CFETCH, OP_2, {.fp_s_m     = op_cfetch         } },
-/* MEMORY */       {   CSTORE, OP_2, {.fp_s_m     = op_cstore         } },
+/* MEMORY */       {   CFETCH, OP_3, {.fp_s_bm    = op_cfetch         } },
+/* MEMORY */       {   CSTORE, OP_3, {.fp_s_bm    = op_cstore         } },
 /* STACK */        {     OVER, OP_0, {.fp_s       = op_over           } },
 /* STACK */        {     PICK, OP_0, {.fp_s       = op_pick           } },
 /* STACK */        {    DEPTH, OP_0, {.fp_s       = op_depth          } },
