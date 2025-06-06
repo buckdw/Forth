@@ -112,6 +112,7 @@ void op_two_plus(Stack *s);
 void op_two_minus(Stack *s);
 void op_d_plus(Stack *s);
 void op_negate(Stack *s);
+void op_dnegate(Stack *s);
 void op_abs(Stack *s);
 void op_dup(Stack *s);
 void op_drop(Stack *s);
