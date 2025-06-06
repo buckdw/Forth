@@ -63,7 +63,7 @@ void op_mod(Stack *s) {
     int a = pop(s);
     if (b == 0) {
         printf("Modulo by zero!\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     push(s, a % b);
 }
@@ -117,8 +117,8 @@ void op_dnegate(Stack *s) {
         return;
     }
 
-    int low = pop(s);
     int high = pop(s);
+    int low  = pop(s);
 
     int64_t value = ((int64_t)(uint32_t)high << 32) | (uint32_t)low;
     value = -value;
@@ -316,7 +316,6 @@ void op_and(Stack *s) {
     int b = pop(s);
     int a = pop(s);
     push(s, a & b);
-    printf("%d\n", a & b);
 }
 
 /* OR */
@@ -533,6 +532,7 @@ void interpret(Stack *stack, Stack *return_stack, int *memory, char *line) {
                 default:
                     printf("Unknown op type\n");
                     exit(EXIT_FAILURE);
+                    break;
             }
         } else if (is_number(token)) {
             push(stack, atoi(token));
