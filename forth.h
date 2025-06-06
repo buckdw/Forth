@@ -48,7 +48,7 @@ typedef struct {
 } DictEntry;
 
 #define ABS         "ABS"
-#define AND         "AND="
+#define AND         "AND"
 #define COUNT       "COUNT"
 #define CR          "CR"
 #define DEPTH       "DEPTH"

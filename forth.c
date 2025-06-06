@@ -276,6 +276,7 @@ void op_and(Stack *s) {
     int b = pop(s);
     int a = pop(s);
     push(s, a & b);
+    printf("%d\n", a & b);
 }
 
 /* OR */
