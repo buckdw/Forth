@@ -48,11 +48,15 @@ typedef struct {
 } DictEntry;
 
 #define ABS         "ABS"
+#define ADD         "+"
 #define AND         "AND"
+#define CFETCH      "C@"
 #define COUNT       "COUNT"
 #define CR          "CR"
+#define CSTORE      "C!"
 #define DEPTH       "DEPTH"
 #define DIV         "/"
+#define DNEGATE     "DNEGATE"
 #define DPLUS       "D+"
 #define DROP        "DROP"
 #define DUP         "DUP"
@@ -74,7 +78,6 @@ typedef struct {
 #define OR          "OR"
 #define OVER        "OVER"
 #define PICK        "PICK"
-#define ADD         "+"
 #define POS         "0>"
 #define PRINT        "."
 #define RFETCH      "R@"
@@ -92,7 +95,6 @@ typedef struct {
 #define TYPE        "TYPE"
 #define XOR         "XOR"
 #define ZERO        "0="
-#define DNEGATE     "DNEGATE"
 
 
 /* internal */
@@ -120,6 +122,8 @@ void op_swap(Stack *s);
 void op_rot(Stack *s);
 void op_store(Stack *s, int *m);
 void op_fetch(Stack *s, int *m);
+void op_cstore(Stack *s, int *m);
+void op_cfetch(Stack *s, int *m);
 void op_over(Stack *s);
 void op_pick(Stack *s);
 void op_depth(Stack *s);
