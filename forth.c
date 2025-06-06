@@ -452,12 +452,14 @@ void op_move(Stack *s, uint8_t *m) {
         // Overlapping, copy backwards
         for (int i = u - 1; i >= 0; i--) {
             m[dest + i] = m[src + i];
+            printf("m[%d] = m[%d]\n", dest+i, src+i);
         }
     } 
     else {
         // No overlap or safe to copy forwards
         for (int i = 0; i < u; i++) {
             m[dest + i] = m[src + i];
+            printf("m[%d] = m[%d]\n", dest+i, src+i);
         }
     }
 }
