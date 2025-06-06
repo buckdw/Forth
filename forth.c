@@ -439,6 +439,29 @@ void op_type(Stack *s, int *m) {
     fflush(stdout);
 }
 
+/* MOVE */
+void op_move(Stack *s, uint8_t *m) {
+    int u = pop_data(s);       // number of bytes
+    int dest = pop_data(s);    // destination addr
+    int src = pop_data(s);     // source addr
+
+    if (u <= 0) 
+        return;
+
+    if (src < dest && src + u > dest) {
+        // Overlapping, copy backwards
+        for (int i = u - 1; i >= 0; i--) {
+            m[dest + i] = m[src + i];
+        }
+    } 
+    else {
+        // No overlap or safe to copy forwards
+        for (int i = 0; i < u; i++) {
+            m[dest + i] = m[src + i];
+        }
+    }
+}
+
 
 /* EXIT -- pseudo command */
 void op_exit() {
@@ -514,7 +537,8 @@ DictEntry dictionary[] = {
 /* IO */           {       CR, OP,   {.fp         = op_cr             } },
 /* IO */           {   SPACES, OP_0, {.fp_s       = op_spaces         } },
 /* IO */           {    COUNT, OP_2, {.fp_s_m     = op_count          } },
-/* IO */           {     TYPE, OP_2, {.fp_s_m     = op_type           } },    
+/* IO */           {     TYPE, OP_2, {.fp_s_m     = op_type           } },
+/* MEMORY */       {     MOVE, OP_3, {.fp_s_bm    = op_move           } },
 /* IO */           {    PRINT, OP_0, {.fp_s       = op_print          } },
 /* PSEUDO */       {     EXIT, OP,   {.fp         = op_exit           } },
 /* SENTINEL */     {     NULL, OP_0, {NULL                            } }
@@ -553,6 +577,10 @@ void interpret(Stack *stack, Stack *return_stack, int *memory, char *line) {
                     if (entry->func.fp_s_m) 
                         entry->func.fp_s_m(stack, memory);                    
                     break;
+                case OP_3:
+                     if (entry->func.fp_s_bm) 
+                        entry->func.fp_s_bm(stack, (uint8_t *)memory);                    
+                    break;               
                 default:
                     printf("Unknown op type\n");
                     exit(EXIT_FAILURE);

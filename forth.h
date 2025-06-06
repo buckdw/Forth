@@ -28,7 +28,8 @@ typedef enum {
     OP,     // f()
     OP_0,   // f(Stack *s)
     OP_1,   // f(Stack *s, Stack *rs)
-    OP_2    // f(Stack *s, int *m)
+    OP_2,   // f(Stack *s, int *m)
+    OP_3    // f(Stack *s, uint8_t *m)
 } OpType;
 
 typedef void (*OpFunc)();
@@ -71,6 +72,7 @@ typedef struct {
 #define MAX         "MAX"
 #define MIN         "MIN"
 #define MOD         "MOD"
+#define MOVE        "MOVE"
 #define MUL         "*"
 #define NEG         "0<"
 #define NEGATE      "NEGATE"
@@ -97,7 +99,6 @@ typedef struct {
 #define TYPE        "TYPE"
 #define XOR         "XOR"
 #define ZERO        "0="
-
 
 /* internal */
 void push(Stack *s, int value);
@@ -151,6 +152,7 @@ void op_cr();
 void op_spaces(Stack *s);
 void op_count(Stack *s, int *m);
 void op_type(Stack *s, int *m);
+void op_move(Stack *s, uint8_t *m);
 void op_print(Stack *s);
 
 /* pseudo operation */
