@@ -125,6 +125,10 @@ void op_greater_than(Stack *s);
 void op_zero_equal(Stack *s);
 void op_zero_less(Stack *s);
 void op_zero_greater(Stack *s);
+void op_and(Stack *s);
+void op_or(Stack *s);
+void op_xor(Stack *s);
+
 void op_emit(Stack *s);
 void op_space();
 void op_cr();
