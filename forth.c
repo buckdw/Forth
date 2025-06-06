@@ -441,9 +441,9 @@ void op_type(Stack *s, int *m) {
 
 /* MOVE */
 void op_move(Stack *s, uint8_t *m) {
-    int u = pop_data(s);       // number of bytes
-    int dest = pop_data(s);    // destination addr
-    int src = pop_data(s);     // source addr
+    int u = pop(s);       // number of bytes
+    int dest = pop(s);    // destination addr
+    int src = pop(s);     // source addr
 
     if (u <= 0) 
         return;
