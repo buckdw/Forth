@@ -110,7 +110,7 @@ void op_negate(Stack *s) {
     push(s, -a);
 }
 
-/* NEGATE */
+/* DNEGATE */
 void op_dnegate(Stack *s) {
     if (s->top < 2) {
         printf("Stack underflow for DNEGATE\n");
