@@ -104,6 +104,12 @@ void op_d_plus(Stack *s) {
     push(s, high_sum);
 }
 
+/* NEGATE */
+void op_negate(Stack *s) {
+    int a = pop(s);
+    push(s, -a);
+}
+
 /* ABS */
 void op_abs(Stack *s) {
     int a = pop(s);
@@ -405,6 +411,24 @@ void op_print(Stack *s) {
     printf("%d\n", pop(s));
 }
 
+
+#include <ctype.h>
+#include <string.h>
+
+
+char *trim(char *line) {
+    while (isspace((unsigned char)*line)) 
+        line++;
+    if (*line == 0)
+        return line;
+    char *end = line + strlen(line) - 1;
+    while (end > line && isspace((unsigned char)*end)) 
+        end--;
+    *(end + 1) = '\0';
+    return line;
+}
+
+
 void to_uppercase(char *str) {
     for (; *str; ++str) 
         *str = toupper(*str);
@@ -434,6 +458,7 @@ DictEntry dictionary[] = {
 /* OPERATOR */     { TWO_PLUS, OP_0, {.fp_s       = op_two_plus       } },
 /* OPERATOR */     {  TWO_MIN, OP_0, {.fp_s       = op_two_minus      } },
 /* OPERATOR */     {    DPLUS, OP_0, {.fp_s       = op_d_plus         } },
+/* LOGICAL */      {   NEGATE, OP_0, {.fp_s       = op_negate         } },
 /* OPERATOR */     {      ABS, OP_0, {.fp_s       = op_abs            } },
 /* STACK */        {      DUP, OP_0, {.fp_s       = op_dup            } },
 /* STACK */        {     DROP, OP_0, {.fp_s       = op_drop           } },
@@ -532,10 +557,11 @@ int main() {
 
     while (true) {
         printf("> ");
-        if (!fgets(line, LINE_SIZE, stdin)) 
-            break;
-        interpret(&stack, &return_stack, memory, line);
-
+        while (fgets(line, sizeof(line), stdin)) {
+            char *t_line = trim(line);
+            if (*t_line) 
+                interpret(&stack, &return_stack, memory, t_line);
+        }
         printf("\nStack: ");
         for (int i = 0; i < stack.top; i++) {
             printf("%d ", stack.data[i]);

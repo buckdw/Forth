@@ -53,6 +53,7 @@ typedef struct {
 #define CR          "CR"
 #define DEPTH       "DEPTH"
 #define DIV         "/"
+#define DPLUS       "D+"
 #define DROP        "DROP"
 #define DUP         "DUP"
 #define EMIT        "EMIT"
@@ -66,6 +67,7 @@ typedef struct {
 #define MOD         "MOD"
 #define MUL         "*"
 #define NEG         "0<"
+#define NEGATE      "NEGATE"
 #define NOT         "NOT"
 #define ONE_MIN     "1-"
 #define ONE_PLUS    "1+"
@@ -90,7 +92,6 @@ typedef struct {
 #define TYPE        "TYPE"
 #define XOR         "XOR"
 #define ZERO        "0="
-#define DPLUS       "D+"
 
 /* internal */
 void push(Stack *s, int value);
@@ -108,6 +109,7 @@ void op_one_minus(Stack *s);
 void op_two_plus(Stack *s);
 void op_two_minus(Stack *s);
 void op_d_plus(Stack *s);
+void op_negate(Stack *s);
 void op_abs(Stack *s);
 void op_dup(Stack *s);
 void op_drop(Stack *s);
