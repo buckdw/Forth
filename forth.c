@@ -564,24 +564,19 @@ void interpret(Stack *stack, Stack *return_stack, int *memory, char *line) {
         if (entry) {
             switch (entry->type) {
                 case OP:
-                    if (entry->func.fp)
-                        entry->func.fp();
+                    if (entry->func.fp) entry->func.fp(); 
                     break;
                 case OP_0:
-                    if (entry->func.fp_s) 
-                        entry->func.fp_s(stack);
+                    if (entry->func.fp_s) entry->func.fp_s(stack); 
                     break;
                 case OP_1:
-                    if (entry->func.fp_s_rs) 
-                        entry->func.fp_s_rs(stack, return_stack);
+                    if (entry->func.fp_s_rs) entry->func.fp_s_rs(stack, return_stack);
                     break;
                 case OP_2:
-                    if (entry->func.fp_s_m) 
-                        entry->func.fp_s_m(stack, memory);                    
+                    if (entry->func.fp_s_m) entry->func.fp_s_m(stack, memory);                    
                     break;
                 case OP_3:
-                     if (entry->func.fp_s_bm) 
-                        entry->func.fp_s_bm(stack, (uint8_t *)memory);                    
+                     if (entry->func.fp_s_bm) entry->func.fp_s_bm(stack, (uint8_t *)memory);                    
                     break;               
                 default:
                     printf("Unknown op type\n");
