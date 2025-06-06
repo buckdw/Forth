@@ -271,6 +271,27 @@ void op_zero_greater(Stack *s) {
     push(s, (a > 0) ? -1 : 0);
 }
 
+/* AND */
+void op_and(Stack *s) {
+    int b = pop(s);
+    int a = pop(s);
+    push(s, a & b);
+}
+
+/* OR */
+void op_or(Stack *s) {
+    int b = pop(s);
+    int a = pop(s);
+    push(s, a | b);
+}
+
+/* XOR */
+void op_xor(Stack *s) {
+    int b = pop(s);
+    int a = pop(s);
+    push(s, a ^ b);
+}
+
 /* EMIT */
 void op_emit(Stack *s) {
     int value = pop(s);
@@ -402,6 +423,9 @@ DictEntry dictionary[] = {
 /* COMPARE */      {     ZERO, OP_0, {.fp_s       = op_zero_equal     } },
 /* COMPARE */      {      NEG, OP_0, {.fp_s       = op_zero_less      } },
 /* COMPARE */      {      POS, OP_0, {.fp_s       = op_zero_greater   } },
+/* LOGICAL */      {      AND, OP_0, {.fp_s       = op_and            } },
+/* LOGICAL */      {       OR, OP_0, {.fp_s       = op_or             } },
+/* LOGICAL */      {      XOR, OP_0, {.fp_s       = op_xor            } },
 /* IO */           {     EMIT, OP_0, {.fp_s       = op_emit           } },
 /* IO */           {    SPACE, OP,   {.fp         = op_space          } },
 /* IO */           {       CR, OP,   {.fp         = op_cr             } },
