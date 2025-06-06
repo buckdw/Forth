@@ -411,24 +411,6 @@ void op_print(Stack *s) {
     printf("%d\n", pop(s));
 }
 
-
-#include <ctype.h>
-#include <string.h>
-
-
-char *trim(char *line) {
-    while (isspace((unsigned char)*line)) 
-        line++;
-    if (*line == 0)
-        return line;
-    char *end = line + strlen(line) - 1;
-    while (end > line && isspace((unsigned char)*end)) 
-        end--;
-    *(end + 1) = '\0';
-    return line;
-}
-
-
 void to_uppercase(char *str) {
     for (; *str; ++str) 
         *str = toupper(*str);
@@ -543,25 +525,31 @@ void interpret(Stack *stack, Stack *return_stack, int *memory, char *line) {
     }
 }
 
+void init_stack(Stack *s) {
+    s->top = 0
+}
+
 /*
  *  Main
  */
 int main() {
-    Stack stack = { .top = 0 };
-    Stack return_stack = { .top = 0};
+    Stack stack;
+    Stack return_stack;
     int memory[MEMORY_SIZE];
     char line[LINE_SIZE + 1];
+
+    init_stack(&stack);
+    init_stack(&return_stack);
 
     printf("Diederick's Forth Interpreter (C) - 2025\n");
     printf("Type 'exit' to quit.\n");
 
     while (true) {
         printf("> ");
-        while (fgets(line, sizeof(line), stdin)) {
-            char *t_line = trim(line);
-            if (*t_line) 
-                interpret(&stack, &return_stack, memory, t_line);
-        }
+        if (!fgets(line, LINE_SIZE, stdin)) 
+            break;
+        interpret(&stack, &return_stack, memory, line);
+
         printf("\nStack: ");
         for (int i = 0; i < stack.top; i++) {
             printf("%d ", stack.data[i]);
