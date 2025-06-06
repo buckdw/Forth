@@ -32,18 +32,20 @@ typedef enum {
 } OpType;
 
 typedef void (*OpFunc)();
-typedef void (*OpFuncStack)(Stack *s);
-typedef void (*OpFuncReturnStack)(Stack *s, Stack *rs);
-typedef void (*OpFuncMemory)(Stack *s, int *m); 
+typedef void (*OpFunc_S)(Stack *s);
+typedef void (*OpFunc_S_RS)(Stack *s, Stack *rs);
+typedef void (*OpFunc_S_M)(Stack *s, int *m); 
+typedef void (*OpFunc_S_BM)(Stack *s, uint8_t *m);
 
 typedef struct {
     const char *word;
     OpType type;
     union {
-        OpFunc  fp;
-        OpFuncStack fp_s;
-        OpFuncReturnStack fp_s_rs;
-        OpFuncMemory fp_s_m;
+        OpFunc fp;
+        OpFunc_S fp_s;
+        OpFunc_S_RS fp_s_rs;
+        OpFunc_S_M fp_s_m;
+        OpFunc_S_BM fp_s_bm;
     } func;
 } DictEntry;
 
