@@ -430,7 +430,7 @@ bool is_number(const char *token) {
 }
 
 DictEntry dictionary[] = {
-/* OPERATOR */     {     PLUS, OP_0, {.fp_s       = op_add            } },
+/* OPERATOR */     {      ADD, OP_0, {.fp_s       = op_add            } },
 /* OPERATOR */     {      SUB, OP_0, {.fp_s       = op_sub            } },
 /* OPERATOR */     {      MUL, OP_0, {.fp_s       = op_mul            } },
 /* OPERATOR */     {      DIV, OP_0, {.fp_s       = op_div            } },

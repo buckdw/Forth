@@ -74,7 +74,7 @@ typedef struct {
 #define OR          "OR"
 #define OVER        "OVER"
 #define PICK        "PICK"
-#define PLUS        "+"
+#define ADD         "+"
 #define POS         "0>"
 #define PRINT        "."
 #define RFETCH      "R@"
