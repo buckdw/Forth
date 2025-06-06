@@ -110,6 +110,24 @@ void op_negate(Stack *s) {
     push(s, -a);
 }
 
+/* NEGATE */
+void op_dnegate(Stack *s) {
+    if (s->top < 2) {
+        printf("Stack underflow for DNEGATE\n");
+        return;
+    }
+
+    int low = pop(s);
+    int high = pop(s);
+
+    int64_t value = ((int64_t)(uint32_t)high << 32) | (uint32_t)low;
+    value = -value;
+
+    push(s, (int)(value >> 32));       // high part
+    push(s, (int)(value & 0xFFFFFFFF)); // low part
+}
+
+
 /* ABS */
 void op_abs(Stack *s) {
     int a = pop(s);
@@ -441,6 +459,7 @@ DictEntry dictionary[] = {
 /* OPERATOR */     {  TWO_MIN, OP_0, {.fp_s       = op_two_minus      } },
 /* OPERATOR */     {    DPLUS, OP_0, {.fp_s       = op_d_plus         } },
 /* LOGICAL */      {   NEGATE, OP_0, {.fp_s       = op_negate         } },
+/* LOGICAL */      {  DNEGATE, OP_0, {.fp_s       = op_dnegate        } },
 /* OPERATOR */     {      ABS, OP_0, {.fp_s       = op_abs            } },
 /* STACK */        {      DUP, OP_0, {.fp_s       = op_dup            } },
 /* STACK */        {     DROP, OP_0, {.fp_s       = op_drop           } },

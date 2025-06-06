@@ -92,6 +92,8 @@ typedef struct {
 #define TYPE        "TYPE"
 #define XOR         "XOR"
 #define ZERO        "0="
+#define DNEGATE     "DNEGATE"
+
 
 /* internal */
 void push(Stack *s, int value);
