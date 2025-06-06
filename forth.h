@@ -61,7 +61,8 @@ typedef struct {
 #define FETCH       "@"
 #define GT          ">"
 #define LT          "<"
-#define MIN         "-"
+#define MAX         "MAX"
+#define MIN         "MIN"
 #define MOD         "MOD"
 #define MUL         "*"
 #define NEG         "0<"
@@ -81,6 +82,7 @@ typedef struct {
 #define SPACE       "SPACE"
 #define SPACES      "SPACES"
 #define STORE       "!"
+#define SUB         "-"
 #define SWAP        "SWAP"
 #define TOR         ">R"
 #define TWO_MIN     "2-"
@@ -128,6 +130,8 @@ void op_zero_greater(Stack *s);
 void op_and(Stack *s);
 void op_or(Stack *s);
 void op_xor(Stack *s);
+void op_min(Stack *s);
+void op_max(Stack *s);
 
 void op_emit(Stack *s);
 void op_space();

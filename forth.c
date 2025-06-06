@@ -293,6 +293,19 @@ void op_xor(Stack *s) {
     push(s, a ^ b);
 }
 
+/* MIN */
+void op_min(Stack *s) {
+    int b = pop(s);
+    int a = pop(s);
+    push(s, (a < b) ? a : b);
+}
+
+/* MAX */
+void op_max(Stack *s) {
+    int b = pop(s);
+    int a = pop(s);
+    push(s, (a > b) ? a : b);
+
 /* EMIT */
 void op_emit(Stack *s) {
     int value = pop(s);
@@ -395,7 +408,7 @@ bool is_number(const char *token) {
 
 DictEntry dictionary[] = {
 /* OPERATOR */     {     PLUS, OP_0, {.fp_s       = op_add            } },
-/* OPERATOR */     {      MIN, OP_0, {.fp_s       = op_sub            } },
+/* OPERATOR */     {      SUB, OP_0, {.fp_s       = op_sub            } },
 /* OPERATOR */     {      MUL, OP_0, {.fp_s       = op_mul            } },
 /* OPERATOR */     {      DIV, OP_0, {.fp_s       = op_div            } },
 /* OPERATOR */     {      MOD, OP_0, {.fp_s       = op_mod            } },
@@ -427,6 +440,8 @@ DictEntry dictionary[] = {
 /* LOGICAL */      {      AND, OP_0, {.fp_s       = op_and            } },
 /* LOGICAL */      {       OR, OP_0, {.fp_s       = op_or             } },
 /* LOGICAL */      {      XOR, OP_0, {.fp_s       = op_xor            } },
+/* LOGICAL */      {      MIN, OP_0, {.fp_s       = op_min            } },
+/* LOGICAL */      {      MAX, OP_0, {.fp_s       = op_max            } },
 /* IO */           {     EMIT, OP_0, {.fp_s       = op_emit           } },
 /* IO */           {    SPACE, OP,   {.fp         = op_space          } },
 /* IO */           {       CR, OP,   {.fp         = op_cr             } },
