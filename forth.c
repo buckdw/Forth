@@ -305,6 +305,7 @@ void op_max(Stack *s) {
     int b = pop(s);
     int a = pop(s);
     push(s, (a > b) ? a : b);
+}
 
 /* EMIT */
 void op_emit(Stack *s) {
