@@ -89,6 +89,7 @@ typedef struct {
 #define PICK        "PICK"
 #define POS         "0>"
 #define PRINT        "."
+#define QUESTION    "?"
 #define RFETCH      "R@"
 #define RFROM       "R>"
 #define ROLL        "ROLL"
@@ -158,6 +159,7 @@ void op_spaces(Stack *s);
 void op_count(Stack *s, int *m);
 void op_type(Stack *s, int *m);
 void op_move(Stack *s, uint8_t *m);
+void op_question(Stack *s, int *m);
 void op_print(Stack *s);
 
 /* pseudo operation */

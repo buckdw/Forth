@@ -3,7 +3,7 @@
 
 void push(Stack *s, int value) {
     if (s->top >= STACK_SIZE) {
-        printf("Stack overflow!\n");
+        fprintf(stderr, "Stack overflow!\n");
         exit(EXIT_FAILURE);
     }
     s->data[s->top++] = value;
@@ -11,7 +11,7 @@ void push(Stack *s, int value) {
 
 int pop(Stack *s) {
     if (s->top == 0) {
-        printf("Stack underflow!\n");
+        fprintf(stderr, "Stack underflow!\n");
         exit(EXIT_FAILURE);
     }
     return s->data[--s->top];
@@ -19,7 +19,7 @@ int pop(Stack *s) {
 
 int peek(Stack *s) {
     if (s->top == 0) {
-        printf("Stack empty!\n");
+        fprintf(stderr, "Stack empty!\n");
         exit(EXIT_FAILURE);
     }
     return s->data[s->top - 1];
@@ -51,7 +51,7 @@ void op_div(Stack *s) {
     int b = pop(s);
     int a = pop(s);
     if (b == 0) {
-        printf("Division by zero!\n");
+        fprintf(stderr, "Division by zero!\n");
         exit(EXIT_FAILURE);
     }
     push(s, a / b);
@@ -62,7 +62,7 @@ void op_mod(Stack *s) {
     int b = pop(s);
     int a = pop(s);
     if (b == 0) {
-        printf("Modulo by zero!\n");
+        fprintf(stderr, "Modulo by zero!\n");
         exit(EXIT_FAILURE);
     }
     push(s, a % b);
@@ -113,7 +113,7 @@ void op_negate(Stack *s) {
 /* DNEGATE */
 void op_dnegate(Stack *s) {
     if (s->top < 2) {
-        printf("Stack underflow for DNEGATE\n");
+        fprintf(stderr, "Stack underflow for DNEGATE\n");
         return;
     }
 
@@ -155,7 +155,7 @@ void op_swap(Stack *s) {
 /* ROT */
 void op_rot(Stack *s) {
     if (s->top < 3) {
-        printf("Stack underflow for ROT!\n");
+        fprintf(stderr, "Stack underflow for ROT!\n");
         exit(EXIT_FAILURE);
     }
     int c = pop(s);    
@@ -171,7 +171,7 @@ void op_store(Stack *s, int *m) {
     int addr = pop(s);
     int value = pop(s);
     if (addr < 0 || addr >= MEMORY_SIZE) {
-        printf("Memory access out of bounds at !\n");
+        fprintf(stderr, "Memory access out of bounds at !\n");
         exit(EXIT_FAILURE);
     }
     m[addr] = value;
@@ -181,7 +181,7 @@ void op_store(Stack *s, int *m) {
 void op_fetch(Stack *s, int *m) {
     int addr = pop(s);
     if (addr < 0 || addr >= MEMORY_SIZE) {
-        printf("Memory access out of bounds at @\n");
+        fprintf(stderr, "Memory access out of bounds at @\n");
         exit(EXIT_FAILURE);
     }
     push(s, m[addr]);
@@ -192,7 +192,7 @@ void op_cstore(Stack *s, uint8_t *m) {
     int addr = pop(s);
     int value = pop(s);
     if (addr < 0 || addr >= MEMORY_SIZE) {
-        printf("Memory access out of bounds in C!\n");
+        fprintf(stderr, "Memory access out of bounds in C!\n");
         exit(EXIT_FAILURE);
     }
     m[addr] = (uint8_t)(value & 0xFF);
@@ -202,7 +202,7 @@ void op_cstore(Stack *s, uint8_t *m) {
 void op_cfetch(Stack *s, uint8_t *m) {
     int addr = pop(s);
     if (addr < 0 || addr >= MEMORY_SIZE) {
-        printf("Memory access out of bounds in C@\n");
+        fprintf(stderr, "Memory access out of bounds in C@\n");
         exit(EXIT_FAILURE);
     }
     uint8_t byte = ((uint8_t *)m)[addr];
@@ -212,7 +212,7 @@ void op_cfetch(Stack *s, uint8_t *m) {
 /* OVER */
 void op_over(Stack *s) {
     if (s->top < 2) {
-        printf("Stack underflow for OVER!\n");
+        fprintf(stderr, "Stack underflow for OVER!\n");
         exit(EXIT_FAILURE);
     }
     int x = s->data[s->top - 2];
@@ -222,12 +222,12 @@ void op_over(Stack *s) {
 /* PICK */
 void op_pick(Stack *s) {
     if (s->top < 1) {
-        printf("Stack underflow for PICK!\n");
+        fprintf(stderr, "Stack underflow for PICK!\n");
         exit(EXIT_FAILURE);
     }
     int n = pop(s);  // the index
     if (n < 0 || n >= s->top) {
-        printf("Invalid PICK index: %d\n", n);
+        fprintf(stderr, "Invalid PICK index: %d\n", n);
         exit(EXIT_FAILURE);
     }
     int value = s->data[s->top - 1 - n];
@@ -242,12 +242,12 @@ void op_depth(Stack *s) {
 /* ROLL */
 void op_roll(Stack *s) {
     if (s->top < 1) {
-        printf("Stack underflow for ROLL!\n");
+        fprintf(stderr, "Stack underflow for ROLL!\n");
         exit(EXIT_FAILURE);
     }
     int n = pop(s);  // depth to roll
     if (n < 0 || n >= s->top) {
-        printf("Invalid ROLL index: %d\n", n);
+        fprintf(stderr, "Invalid ROLL index: %d\n", n);
         exit(EXIT_FAILURE);
     }
     int index = s->top - 1 - n;
@@ -261,7 +261,7 @@ void op_roll(Stack *s) {
 /* >R -> TO R */
 void op_to_r(Stack *s, Stack *rs) {
     if (s->top == 0) {
-        printf("Stack underflow for >R!\n");
+        fprintf(stderr, "Stack underflow for >R!\n");
         exit(EXIT_FAILURE);
     }
     int value = pop(s);
@@ -271,7 +271,7 @@ void op_to_r(Stack *s, Stack *rs) {
 /* R> -> R FROM */
 void op_r_from(Stack *s, Stack *rs) {
     if (rs->top == 0) {
-        printf("Return stack underflow for R>!\n");
+        fprintf(stderr, "Return stack underflow for R>!\n");
         exit(EXIT_FAILURE);
     }
     int value = pop(rs);
@@ -281,7 +281,7 @@ void op_r_from(Stack *s, Stack *rs) {
 /* R@ -> R FETCH */
 void op_r_fetch(Stack *s, Stack *rs) {
     if (rs->top == 0) {
-        printf("Return stack empty for R@!\n");
+        fprintf(stderr, "Return stack empty for R@!\n");
         exit(EXIT_FAILURE);
     }
     int value = rs->data[rs->top - 1];
@@ -372,7 +372,7 @@ void op_max(Stack *s) {
 void op_emit(Stack *s) {
     int value = pop(s);
     if (value < 0 || value > 255) {
-        printf("Invalid EMIT value: %d\n", value);
+        fprintf(stderr, "Invalid EMIT value: %d\n", value);
         exit(EXIT_FAILURE);
     }
     putchar(value);
@@ -395,7 +395,7 @@ void op_cr() {
 void op_spaces(Stack *s) {
     int count = pop(s);
     if (count < 0) {
-        printf("Invalid SPACES count: %d\n", count);
+        fprintf(stderr, "Invalid SPACES count: %d\n", count);
         exit(EXIT_FAILURE);
     }
     for (int i = 0; i < count; i++) {
@@ -408,12 +408,12 @@ void op_spaces(Stack *s) {
 void op_count(Stack *s, int *m) {
     int addr = pop(s);
     if (addr < 0 || addr >= MEMORY_SIZE) {
-        printf("Invalid address in COUNT\n");
+        fprintf(stderr, "Invalid address in COUNT\n");
         exit(EXIT_FAILURE);
     }
     int len = m[addr];
     if (addr + 1 >= MEMORY_SIZE) {
-        printf("COUNT results in out-of-bounds address\n");
+        fprintf(stderr, "COUNT results in out-of-bounds address\n");
         exit(EXIT_FAILURE);
     }
     push(s, addr + 1);  // Address of first char
@@ -425,13 +425,13 @@ void op_type(Stack *s, int *m) {
     int len = pop(s);
     int addr = pop(s);
     if (addr < 0 || addr + len > MEMORY_SIZE) {
-        printf("Invalid memory range in TYPE\n");
+        fprintf(stderr, "Invalid memory range in TYPE\n");
         exit(EXIT_FAILURE);
     }
     for (int i = 0; i < len; i++) {
         int val = m[addr + i];
         if (val < 0 || val > 255) {
-            printf("Invalid character code in TYPE: %d\n", val);
+            fprintf(stderr, "Invalid character code in TYPE: %d\n", val);
             exit(EXIT_FAILURE);
         }
         putchar(val);
@@ -452,38 +452,37 @@ void op_move(Stack *s, uint8_t *m) {
         // Overlapping, copy backwards
         for (int i = u - 1; i >= 0; i--) {
             m[dest + i] = m[src + i];
-            printf("m[%d] = m[%d] -> m[%d] = %d\n", dest+i, src+i, dest+i, m[dest + i]);
+            fprintf(stdout, "m[%d] = m[%d] -> m[%d] = %d\n", dest+i, src+i, dest+i, m[dest + i]);
         }
     } 
     else {
         // No overlap or safe to copy forwards
         for (int i = 0; i < u; i++) {
             m[dest + i] = m[src + i];
-            printf("m[%d] = m[%d] -> m[%d] = %d\n", dest+i, src+i, dest+i, m[dest + i]);
+            fprintf(stdout, "m[%d] = m[%d] -> m[%d] = %d\n", dest+i, src+i, dest+i, m[dest + i]);
         }
     }
 }
 
 /* ? */
-void op_question(Stack *s, uint8_t *m) {
+void op_question(Stack *s, int *m) {
     int addr = pop(s);
     if (addr < 0 || addr >= MEMORY_SIZE) {
-        printf("Memory access out of bounds at !\n");
+        fprintf(stderr, "Memory access out of bounds at !\n");
         exit(EXIT_FAILURE);
     }
     int value = *((int *)(m + addr));
-    printf("%d\n", value);
-}
-
-
-/* EXIT -- pseudo command */
-void op_exit() {
-    exit(EXIT_SUCCESS);
+    fprintf(stdout, "%d\n", value);
 }
 
 /* . -> print and remove */
 void op_print(Stack *s) {
-    printf("%d\n", pop(s));
+    fprintf(stdout, "%d\n", pop(s));
+}
+
+/* EXIT -- pseudo command */
+void op_exit() {
+    exit(EXIT_SUCCESS);
 }
 
 void to_uppercase(char *str) {
@@ -552,6 +551,7 @@ DictEntry dictionary[] = {
 /* IO */           {    COUNT, OP_2, {.fp_s_m     = op_count          } },
 /* IO */           {     TYPE, OP_2, {.fp_s_m     = op_type           } },
 /* MEMORY */       {     MOVE, OP_3, {.fp_s_bm    = op_move           } },
+/* MEMORY */       { QUESTION, OP_2, {.fp_s_m     = op_question       } },
 /* IO */           {    PRINT, OP_0, {.fp_s       = op_print          } },
 /* PSEUDO */       {     EXIT, OP,   {.fp         = op_exit           } },
 /* SENTINEL */     {     NULL, OP_0, {NULL                            } }
@@ -590,14 +590,14 @@ void interpret(Stack *stack, Stack *return_stack, int *memory, char *line) {
                      if (entry->func.fp_s_bm) entry->func.fp_s_bm(stack, (uint8_t *)memory);                    
                     break;               
                 default:
-                    printf("Unknown op type\n");
+                    fprintf(stdout, "Unknown op type\n");
                     exit(EXIT_FAILURE);
                     break;
             }
         } else if (is_number(token)) {
             push(stack, atoi(token));
         } else {
-            printf("Unknown word: %s\n", token);
+            fprintf(stdout, "Unknown word: %s\n", token);
         }
 
         token = strtok(NULL, " \t\r\n");
@@ -620,20 +620,20 @@ int main() {
     init_stack(&stack);
     init_stack(&return_stack);
 
-    printf("Diederick's Forth Interpreter (C) - 2025\n");
-    printf("Type 'exit' to quit.\n");
+    fprintf(stdout, "Diederick's Forth Interpreter (C) - 2025\n");
+    fprintf(stdout, "Type 'exit' to quit.\n");
 
     while (true) {
-        printf("> ");
+        fprintf(stdout, "> ");
         if (!fgets(line, LINE_SIZE, stdin)) 
             break;
         interpret(&stack, &return_stack, memory, line);
 
-        printf("\nStack: ");
+        fprintf(stdout, "\nStack: ");
         for (int i = 0; i < stack.top; i++) {
-            printf("%d ", stack.data[i]);
+            fprintf(stdout, "%d ", stack.data[i]);
         }
-        printf("\n");
+        fprintf(stdout, "\n");
     }
 
     return EXIT_SUCCESS;
