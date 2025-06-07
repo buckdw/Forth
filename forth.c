@@ -701,7 +701,7 @@ int main() {
     init_stack(&stack);
     init_stack(&return_stack);
 
-    fprintf(stdout, "YAFI - 32-bit Forth-79 Interpreter (C) - 2025.\n");
+    fprintf(stdout, "YAFI - 32-bit Forth79 Interpreter (C) - 2025.\n");
     fprintf(stdout, "YAFI - Yet Another Forth Interpreter.\n\n");
     fprintf(stdout, "Type 'exit' to quit.\n");
 
