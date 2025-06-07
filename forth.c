@@ -475,6 +475,18 @@ void op_question(Stack *s, int *m) {
     fprintf(stdout, "%d\n", value);
 }
 
+/* FILL */
+void op_fill(Stack *s, uint8_t *m) {
+    int c = pop(s);      // value to fill with (char)
+    int u = pop(s);      // number of bytes
+    int addr = pop(s);   // start address
+    if (addr < 0 || addr + u > MEMORY_SIZE * sizeof(int)) {
+        fprintf(stderr, "FILL out of bounds: addr=%d size=%d\n", addr, u);
+        exit(EXIT_FAILURE);
+    }
+    memset(m + addr, (uint8_t)c, u);
+}
+
 /* . -> print and remove */
 void op_print(Stack *s) {
     fprintf(stdout, "%d\n", pop(s));
@@ -552,6 +564,7 @@ DictEntry dictionary[] = {
 /* IO */           {     TYPE, OP_2, {.fp_s_m     = op_type           } },
 /* MEMORY */       {     MOVE, OP_3, {.fp_s_bm    = op_move           } },
 /* MEMORY */       { QUESTION, OP_2, {.fp_s_m     = op_question       } },
+/* MEMORY */       {     FILL, OP_3, {.fp_s_bm    = op_fill           } },
 /* IO */           {    PRINT, OP_0, {.fp_s       = op_print          } },
 /* PSEUDO */       {     EXIT, OP,   {.fp         = op_exit           } },
 /* SENTINEL */     {     NULL, OP_0, {NULL                            } }
