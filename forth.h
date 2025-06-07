@@ -106,6 +106,7 @@ typedef struct {
 #define TYPE        "TYPE"
 #define XOR         "XOR"
 #define ZERO        "0="
+#define CMOVE       "CMOVE"
 
 /* internal */
 void push(Stack *s, int value);
@@ -160,6 +161,7 @@ void op_spaces(Stack *s);
 void op_count(Stack *s, int *m);
 void op_type(Stack *s, int *m);
 void op_move(Stack *s, uint8_t *m);
+void op_cmove(Stack *s, uint8_t *m);
 void op_fill(Stack *s, uint8_t *m);
 void op_question(Stack *s, int *m);
 void op_print(Stack *s);

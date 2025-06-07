@@ -487,6 +487,24 @@ void op_fill(Stack *s, uint8_t *m) {
     memset(m + addr, (uint8_t)c, u);
 }
 
+/* CMOVE */
+void op_cmove(Stack *s, uint8_t *m) {
+    int n = pop(s);
+    int dst = pop(s);
+    int src = pop(s);
+
+    if (src < 0 || src + n > MEMORY_SIZE * sizeof(int) ||
+        dst < 0 || dst + n > MEMORY_SIZE * sizeof(int)) {
+        fprintf(stderr, "CMOVE: memory access out of bounds\n");
+        exit(EXIT_FAILURE);
+    }
+
+    for (int i = 0; i < n; i++) {
+        m[dst + i] = m[src + i];
+    }
+}
+
+
 /* . -> print and remove */
 void op_print(Stack *s) {
     fprintf(stdout, "%d\n", pop(s));
@@ -563,6 +581,7 @@ DictEntry dictionary[] = {
 /* IO */           {    COUNT, OP_2, {.fp_s_m     = op_count          } },
 /* IO */           {     TYPE, OP_2, {.fp_s_m     = op_type           } },
 /* MEMORY */       {     MOVE, OP_3, {.fp_s_bm    = op_move           } },
+/* MEMORY */       {    CMOVE, OP_3, {.fp_s_bm    = op_cmove          } },
 /* MEMORY */       { QUESTION, OP_2, {.fp_s_m     = op_question       } },
 /* MEMORY */       {     FILL, OP_3, {.fp_s_bm    = op_fill           } },
 /* IO */           {    PRINT, OP_0, {.fp_s       = op_print          } },
@@ -633,7 +652,7 @@ int main() {
     init_stack(&stack);
     init_stack(&return_stack);
 
-    fprintf(stdout, "YAFI - 32-bit Forth Interpreter (C) - 2025\n");
+    fprintf(stdout, "YAFI - 32-bit Forth-79 Interpreter (C) - 2025\n");
     fprintf(stdout, "Type 'exit' to quit.\n");
 
     while (true) {
