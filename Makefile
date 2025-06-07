@@ -1,15 +1,18 @@
 # Makefile for Simple Forth Interpreter
 CC = gcc
 CFLAGS = -Wall -Wextra -O2
-TARGET = Forth
-SRC = Forth.c
-
-.PHONY: all clean
+OBJ = obj/Forth.o obj/Stack.o
+TARGET = obj/Forth
 
 all: $(TARGET)
 
-$(TARGET): $(SRC)
-	$(CC) $(CFLAGS) -o obj/$(TARGET) $(SRC)
+$(TARGET): $(OBJ)
+	$(CC) $(CFLAGS) -o $@ $^
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $<
 
 clean:
-	rm -f obj/$(TARGET)
+	rm -f $(OBJ) $(TARGET)
+
+.PHONY: all clean
