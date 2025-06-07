@@ -29,7 +29,7 @@ int peek(Stack *s) {
  *  Memory
  */
 
-/* @ -> fetch from memory address [M.1] */
+/* @ -> fetch from memory address [M.01] */
 void op_fetch(Stack *s, int *m) {
     int addr = pop(s);
     if (addr < 0 || addr >= MEMORY_SIZE) {
@@ -39,7 +39,7 @@ void op_fetch(Stack *s, int *m) {
     push(s, m[addr]);
 }
 
-/* ! -> store to memory address [M.2] */
+/* ! -> store to memory address [M.02] */
 void op_store(Stack *s, int *m) {
     int addr = pop(s);
     int value = pop(s);
@@ -50,7 +50,7 @@ void op_store(Stack *s, int *m) {
     m[addr] = value;
 }
 
-/* C@ -> CSTORE -> store a byte [M.3] */
+/* C@ -> CSTORE -> store a byte [M.03] */
 void op_cstore(Stack *s, uint8_t *m) {
     int addr = pop(s);
     int value = pop(s);
@@ -61,7 +61,7 @@ void op_cstore(Stack *s, uint8_t *m) {
     m[addr] = (uint8_t)(value & 0xFF);
 }
 
-/* C! -> CFETCH -> fetch a byte [M.4] */
+/* C! -> CFETCH -> fetch a byte [M.04] */
 void op_cfetch(Stack *s, uint8_t *m) {
     int addr = pop(s);
     if (addr < 0 || addr >= MEMORY_SIZE) {
@@ -72,7 +72,7 @@ void op_cfetch(Stack *s, uint8_t *m) {
     push(s, byte);
 }
 
-/* ? [M.5] */
+/* ? [M.05] */
 void op_question(Stack *s, int *m) {
     int addr = pop(s);
     if (addr < 0 || addr >= MEMORY_SIZE) {
@@ -83,7 +83,7 @@ void op_question(Stack *s, int *m) {
     fprintf(stdout, "%d\n", value);
 }
 
-/* MOVE [M.7] */
+/* MOVE [M.07] */
 void op_move(Stack *s, uint8_t *m) {
     int u = pop(s);       // number of bytes
     int dest = pop(s);    // destination addr
@@ -108,7 +108,7 @@ void op_move(Stack *s, uint8_t *m) {
     }
 }
 
-/* CMOVE [M.8] */
+/* CMOVE [M.08] */
 void op_cmove(Stack *s, uint8_t *m) {
     int count = pop(s);
     int src = pop(s);
@@ -128,7 +128,7 @@ void op_cmove(Stack *s, uint8_t *m) {
     memmove(m + udest, m + usrc, ucount);
 }
 
-/* FILL [M.9] */
+/* FILL [M.09] */
 void op_fill(Stack *s, uint8_t *m) {
     int value = pop(s);    // value to fill
     int count = pop(s);    // number of bytes to fill
@@ -151,17 +151,17 @@ void op_fill(Stack *s, uint8_t *m) {
  *  STACK 
  */
 
-/* DUP [S.1] */
+/* DUP [S.01] */
 void op_dup(Stack *s) {
     push(s, peek(s));
 }
 
-/* DROP [S.2] */
+/* DROP [S.02] */
 void op_drop(Stack *s) {
     pop(s);
 }
 
-/* SWAP [S.3] */
+/* SWAP [S.03] */
 void op_swap(Stack *s) {
     int a = pop(s);
     int b = pop(s);
@@ -169,7 +169,7 @@ void op_swap(Stack *s) {
     push(s, b);
 }
 
-/* OVER [S.4] */
+/* OVER [S.04] */
 void op_over(Stack *s) {
     if (s->top < 2) {
         fprintf(stderr, "Stack underflow for OVER!\n");
@@ -179,7 +179,7 @@ void op_over(Stack *s) {
     push(s, x);
 }
 
-/* ROT [S.5] */
+/* ROT [S.05] */
 void op_rot(Stack *s) {
     if (s->top < 3) {
         fprintf(stderr, "Stack underflow for ROT!\n");
@@ -193,7 +193,7 @@ void op_rot(Stack *s) {
     push(s, a);        
 }
 
-/* PICK [S.6] */
+/* PICK [S.06] */
 void op_pick(Stack *s) {
     if (s->top < 1) {
         fprintf(stderr, "Stack underflow for PICK!\n");
@@ -208,7 +208,7 @@ void op_pick(Stack *s) {
     push(s, value);
 }
 
-/* ROLL [S.7] */
+/* ROLL [S.07] */
 void op_roll(Stack *s) {
     if (s->top < 1) {
         fprintf(stderr, "Stack underflow for ROLL!\n");
@@ -227,7 +227,7 @@ void op_roll(Stack *s) {
     s->data[s->top - 1] = value;
 }
 
-/* DEPTH [S.9] */
+/* DEPTH [S.09] */
 void op_depth(Stack *s) {
     push(s, s->top);
 }
@@ -267,46 +267,46 @@ void op_r_fetch(Stack *s, Stack *rs) {
  *  COMPARE
  */
 
-/* LT -> LESS THAN [C.1] */
+/* LT -> LESS THAN [C.01] */
 void op_less_than(Stack *s) {
     int b = pop(s);
     int a = pop(s);
     push(s, (a < b) ? -1 : 0);
 }
 
-/* EQ -> EQUAL [C.2] */
+/* EQ -> EQUAL [C.02] */
 void op_equal(Stack *s) {
     int b = pop(s);
     int a = pop(s);
     push(s, (a == b) ? -1 : 0);
 }
 
-/* GT -> GREATER THAN [C.3] */
+/* GT -> GREATER THAN [C.03] */
 void op_greater_than(Stack *s) {
     int b = pop(s);
     int a = pop(s);
     push(s, (a > b) ? -1 : 0);
 }
 
-/* NEG [C.4] */
+/* NEG [C.04] */
 void op_zero_less(Stack *s) {
     int a = pop(s);
     push(s, (a < 0) ? -1 : 0);
 }
 
-/* ZERO [C.5] */
+/* ZERO [C.05] */
 void op_zero_equal(Stack *s) {
     int a = pop(s);
     push(s, (a == 0) ? -1 : 0);
 }
 
-/* POS [C.6] */
+/* POS [C.06] */
 void op_zero_greater(Stack *s) {
     int a = pop(s);
     push(s, (a > 0) ? -1 : 0);
 }
 
-/* NOT [C.9] */
+/* NOT [C.09] */
 void op_not(Stack *s) {
     int a = pop(s);
     push(s, ~a);
@@ -317,28 +317,28 @@ void op_not(Stack *s) {
  *  LOGICAL
  */
 
- /* ADD [L.1] */
+ /* ADD [L.01] */
 void op_add(Stack *s) {
     int b = pop(s);
     int a = pop(s);
     push(s, a + b);
 }
 
-/* SUB [L.2] */
+/* SUB [L.02] */
 void op_sub(Stack *s) {
     int b = pop(s);
     int a = pop(s);
     push(s, a - b);
 }
 
-/* MUL [L.3] */
+/* MUL [L.03] */
 void op_mul(Stack *s) {
     int b = pop(s);
     int a = pop(s);
     push(s, a * b);
 }
 
-/* DIV [L.4] */
+/* DIV [L.04] */
 void op_div(Stack *s) {
     int b = pop(s);
     int a = pop(s);
@@ -349,7 +349,7 @@ void op_div(Stack *s) {
     push(s, a / b);
 }
 
-/* MOD [L.5] */
+/* MOD [L.05] */
 void op_mod(Stack *s) {
     int b = pop(s);
     int a = pop(s);
@@ -360,17 +360,17 @@ void op_mod(Stack *s) {
     push(s, a % b);
 }
 
-/* 1+ [L.7] */
+/* 1+ [L.07] */
 void op_one_plus(Stack *s) {
     push(s, pop(s) + 1);
 }
 
-/* 1- [L.8] */
+/* 1- [L.08] */
 void op_one_minus(Stack *s) {
     push(s, pop(s) - 1);
 }
 
-/* 2+ [L.9] */
+/* 2+ [L.09] */
 void op_two_plus(Stack *s) {
     push(s, pop(s) + 2);
 }
@@ -462,16 +462,16 @@ void op_xor(Stack *s) {
 
 
 /*
- *  INPUT/OUTPUT
+ *  INPUT/OUTPUT - CHARACTERS 
  */
 
-/* CR [IO.1] */
+/* CR [IOC.01] */
 void op_cr() {
     putchar('\n');
     fflush(stdout);
 }
 
-/* EMIT [IO.2] */
+/* EMIT [IOC.02] */
 void op_emit(Stack *s) {
     int value = pop(s);
     if (value < 0 || value > 255) {
@@ -482,13 +482,13 @@ void op_emit(Stack *s) {
     fflush(stdout); 
 }
 
-/* SPACE [IO.3] */
+/* SPACE [IOC.03] */
 void op_space() {
     putchar(' ');
     fflush(stdout);
 }
 
-/* SPACES [IO.4] */
+/* SPACES [IOC.04] */
 void op_spaces(Stack *s) {
     int count = pop(s);
     if (count < 0) {
@@ -501,7 +501,7 @@ void op_spaces(Stack *s) {
     fflush(stdout);
 }
 
-/* TYPE [IO.6] */
+/* TYPE [IOC.06] */
 void op_type(Stack *s, int *m) {
     int len = pop(s);
     int addr = pop(s);
@@ -520,7 +520,7 @@ void op_type(Stack *s, int *m) {
     fflush(stdout);
 }
 
-/* COUNT [IO.7] */
+/* COUNT [IOC.07] */
 void op_count(Stack *s, int *m) {
     int addr = pop(s);
     if (addr < 0 || addr >= MEMORY_SIZE) {
@@ -536,7 +536,12 @@ void op_count(Stack *s, int *m) {
     push(s, len);       // Length
 }
 
-/* . -> print and remove */
+
+/*
+ *  INPUT/OUTPUT - NUMBERS 
+ */
+
+/* . -> print and remove [ION.03] */
 void op_print(Stack *s) {
     fprintf(stdout, "%d\n", pop(s));
 }
@@ -565,6 +570,7 @@ bool is_number(const char *token) {
 }
 
 DictEntry dictionary[] = {
+/* COMPUTATION */
 /* [C.01] */     {       LT, OP_0, {.fp_s       = op_less_than      } }, 
 /* [C.02] */     {       EQ, OP_0, {.fp_s       = op_equal          } }, 
 /* [C.03] */     {       GT, OP_0, {.fp_s       = op_greater_than   } }, 
@@ -572,6 +578,16 @@ DictEntry dictionary[] = {
 /* [C.05] */     {     ZERO, OP_0, {.fp_s       = op_zero_equal     } },
 /* [C.06] */     {      POS, OP_0, {.fp_s       = op_zero_greater   } },
 /* [C.09] */     {      NOT, OP_0, {.fp_s       = op_not            } },
+/* [IOC.01] */   {       CR, OP,   {.fp         = op_cr             } },
+
+/* IO-CHARACTERS */
+/* [IOC.02] */   {     EMIT, OP_0, {.fp_s       = op_emit           } },
+/* [IOC.03] */   {    SPACE, OP,   {.fp         = op_space          } },
+/* [IOC.04] */   {   SPACES, OP_0, {.fp_s       = op_spaces         } },
+/* [IOC.06] */   {     TYPE, OP_2, {.fp_s_m     = op_type           } },
+/* [IOC.07] */   {    COUNT, OP_2, {.fp_s_m     = op_count          } },
+
+/* LOGICAL */
 /* [L.01] */     {      ADD, OP_0, {.fp_s       = op_add            } },
 /* [L.02] */     {      SUB, OP_0, {.fp_s       = op_sub            } },
 /* [L.03] */     {      MUL, OP_0, {.fp_s       = op_mul            } },
@@ -582,42 +598,44 @@ DictEntry dictionary[] = {
 /* [L.09] */     { TWO_PLUS, OP_0, {.fp_s       = op_two_plus       } },
 /* [L.10] */     {  TWO_MIN, OP_0, {.fp_s       = op_two_minus      } },
 /* [L.11] */     {    DPLUS, OP_0, {.fp_s       = op_d_plus         } },
+/* [L.16] */     {      MAX, OP_0, {.fp_s       = op_max            } },
+/* [L.17] */     {      MIN, OP_0, {.fp_s       = op_min            } },
 /* [L.18] */     {      ABS, OP_0, {.fp_s       = op_abs            } },
 /* [L.19] */     {   NEGATE, OP_0, {.fp_s       = op_negate         } },
 /* [L.20] */     {  DNEGATE, OP_0, {.fp_s       = op_dnegate        } },
+/* [L.21] */     {      AND, OP_0, {.fp_s       = op_and            } },
+/* [L.22] */     {       OR, OP_0, {.fp_s       = op_or             } },
+/* [L.23] */     {      XOR, OP_0, {.fp_s       = op_xor            } },
+
+/* MEMORY */
 /* [M.01] */     {    FETCH, OP_2, {.fp_s_m     = op_fetch          } },
 /* [M.02] */     {    STORE, OP_2, {.fp_s_m     = op_store          } },
 /* [M.03] */     {   CFETCH, OP_3, {.fp_s_bm    = op_cfetch         } },
 /* [M.04] */     {   CSTORE, OP_3, {.fp_s_bm    = op_cstore         } },
+/* [M.05] */     { QUESTION, OP_2, {.fp_s_m     = op_question       } },
+/* [M.07] */     {     MOVE, OP_3, {.fp_s_bm    = op_move           } },
+/* [M.08] */     {    CMOVE, OP_3, {.fp_s_bm    = op_cmove          } },
+/* [M.09] */     {     FILL, OP_3, {.fp_s_bm    = op_fill           } },
+
+/* STACK */
 /* [S.01] */     {      DUP, OP_0, {.fp_s       = op_dup            } },
 /* [S.02] */     {     DROP, OP_0, {.fp_s       = op_drop           } },
 /* [S.03] */     {     SWAP, OP_0, {.fp_s       = op_swap           } },
 /* [S.04] */     {     OVER, OP_0, {.fp_s       = op_over           } },
 /* [S.05] */     {      ROT, OP_0, {.fp_s       = op_rot            } },
-/* IO */           {       CR, OP,   {.fp         = op_cr             } },
-/* IO */           {     EMIT, OP_0, {.fp_s       = op_emit           } },
-/* IO */           {     TYPE, OP_2, {.fp_s_m     = op_type           } },
-/* IO */           {    COUNT, OP_2, {.fp_s_m     = op_count          } },
-/* IO */           {    PRINT, OP_0, {.fp_s       = op_print          } },
-/* IO */           {    SPACE, OP,   {.fp         = op_space          } },
-/* IO */           {   SPACES, OP_0, {.fp_s       = op_spaces         } },
-/* LOGICAL */      {       OR, OP_0, {.fp_s       = op_or             } },
-/* LOGICAL */      {      AND, OP_0, {.fp_s       = op_and            } },
-/* LOGICAL */      {      MAX, OP_0, {.fp_s       = op_max            } },
-/* LOGICAL */      {      MIN, OP_0, {.fp_s       = op_min            } },
-/* LOGICAL */      {      XOR, OP_0, {.fp_s       = op_xor            } },
-/* MEMORY */       {     FILL, OP_3, {.fp_s_bm    = op_fill           } },
-/* MEMORY */       {     MOVE, OP_3, {.fp_s_bm    = op_move           } },
-/* MEMORY */       {    CMOVE, OP_3, {.fp_s_bm    = op_cmove          } },
-/* MEMORY */       { QUESTION, OP_2, {.fp_s_m     = op_question       } },
-/* PSEUDO */       {     EXIT, OP,   {.fp         = op_exit           } },
-/* SENTINEL */     {     NULL, OP_0, {NULL                            } }
-/* STACK */        {      TOR, OP_1, {.fp_s_rs    = op_to_r           } },
-/* STACK */        {     PICK, OP_0, {.fp_s       = op_pick           } },
-/* STACK */        {     ROLL, OP_0, {.fp_s       = op_roll           } },
-/* STACK */        {    DEPTH, OP_0, {.fp_s       = op_depth          } },
-/* STACK */        {    RFROM, OP_1, {.fp_s_rs    = op_r_from         } },
-/* STACK */        {   RFETCH, OP_1, {.fp_s_rs    = op_r_fetch        } },
+/* [S.06] */     {     PICK, OP_0, {.fp_s       = op_pick           } },
+/* [S.07] */     {     ROLL, OP_0, {.fp_s       = op_roll           } },
+/* [S.09] */     {    DEPTH, OP_0, {.fp_s       = op_depth          } },
+/* [S.10] */     {      TOR, OP_1, {.fp_s_rs    = op_to_r           } },
+/* [S.11] */     {    RFROM, OP_1, {.fp_s_rs    = op_r_from         } },
+/* [S.12] */     {   RFETCH, OP_1, {.fp_s_rs    = op_r_fetch        } },
+
+/* IO-NUMBERS */
+/* [ION.03] */   {    PRINT, OP_0, {.fp_s       = op_print          } },
+
+/* PSEUDO */
+/* PSEUDO */     {     EXIT, OP,   {.fp         = op_exit           } },
+/* SENTINEL */   {     NULL, OP_0, {NULL                            } }
 };   
  
 DictEntry *find_entry(const char *word) {
