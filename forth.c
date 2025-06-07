@@ -360,6 +360,24 @@ void op_mod(Stack *s) {
     push(s, a % b);
 }
 
+/* DIVMOD [L.06] */
+void op_divmod(Stack *s) {
+    int divisor = pop(s);
+    int dividend = pop(s);
+
+    if (divisor == 0) {
+        fprintf(stderr, "/MOD error: Division by zero\n");
+        exit(EXIT_FAILURE);
+    }
+
+    int quotient = dividend / divisor;
+    int remainder = dividend % divisor;
+
+    push(s, remainder);
+    push(s, quotient);
+}
+
+
 /* 1+ [L.07] */
 void op_one_plus(Stack *s) {
     push(s, pop(s) + 1);
@@ -593,6 +611,7 @@ DictEntry dictionary[] = {
 /* [L.03] */     {      MUL, OP_0, {.fp_s       = op_mul            } },
 /* [L.04] */     {      DIV, OP_0, {.fp_s       = op_div            } },
 /* [L.05] */     {      MOD, OP_0, {.fp_s       = op_mod            } },
+/* [L.06] */     {   DIVMOD, OP_0, {.fp_s       = op_divmod         } },
 /* [L.07] */     { ONE_PLUS, OP_0, {.fp_s       = op_one_plus       } },
 /* [L.08] */     {  ONE_MIN, OP_0, {.fp_s       = op_one_minus      } },
 /* [L.09] */     { TWO_PLUS, OP_0, {.fp_s       = op_two_plus       } },

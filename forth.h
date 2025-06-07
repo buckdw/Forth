@@ -105,6 +105,7 @@ typedef struct {
 #define TYPE        "TYPE"
 #define XOR         "XOR"
 #define ZERO        "0="
+#define DIVMOD      "/MOD"
 
 /* internal */
 void push(Stack *s, int value);
@@ -132,6 +133,7 @@ int peek(Stack *s);
 /* [L.03] */ void op_mul(Stack *s);
 /* [L.04] */ void op_div(Stack *s);
 /* [L.05] */ void op_mod(Stack *s);
+/* [L.06] */ void op_divmod(Stack *s);
 /* [L.07] */ void op_one_plus(Stack *s);
 /* [L.08] */ void op_one_minus(Stack *s);
 /* [L.09] */ void op_two_plus(Stack *s);
