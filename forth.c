@@ -620,7 +620,7 @@ int main() {
     init_stack(&stack);
     init_stack(&return_stack);
 
-    fprintf(stdout, "YAFI - Diederick's 32-bit Forth Interpreter (C) - 2025\n");
+    fprintf(stdout, "YAFI - 32-bit Forth Interpreter (C) - 2025\n");
     fprintf(stdout, "Type 'exit' to quit.\n");
 
     while (true) {
