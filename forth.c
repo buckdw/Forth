@@ -495,19 +495,22 @@ void op_fill(Stack *s, uint8_t *m) {
 
 /* CMOVE */
 void op_cmove(Stack *s, uint8_t *m) {
-    int n = pop(s);
-    int dst = pop(s);
+    int count = pop(s);
     int src = pop(s);
-
-    if (src < 0 || src + n > MEMORY_SIZE * sizeof(int) ||
-        dst < 0 || dst + n > MEMORY_SIZE * sizeof(int)) {
-        fprintf(stderr, "CMOVE: memory access out of bounds\n");
+    int dest = pop(s);
+    if (count < 0 || src < 0 || dest < 0) {
+        fprintf(stderr, "CMOVE error: Negative address or count\n");
         exit(EXIT_FAILURE);
     }
-
-    for (int i = 0; i < n; i++) {
-        m[dst + i] = m[src + i];
+    uint32_t ucount = (uint32_t)count;
+    uint32_t usrc = (uint32_t)src;
+    uint32_t udest = (uint32_t)dest;
+    uint32_t mem_size_bytes = MEMORY_SIZE * sizeof(int);
+    if (usrc + ucount > mem_size_bytes || udest + ucount > mem_size_bytes) {
+        fprintf(stderr, "CMOVE error: Memory access out of bounds\n");
+        exit(EXIT_FAILURE);
     }
+    memmove(m + udest, m + usrc, ucount);
 }
 
 /* . -> print and remove */
