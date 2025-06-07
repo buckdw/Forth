@@ -113,7 +113,12 @@ int peek(Stack *s);
 
 
 /* operations */
+/* [C.01] */ void op_less_than(Stack *s);
 /* [C.02] */ void op_equal(Stack *s);
+/* [C.03] */ void op_greater_than(Stack *s);
+/* [C.04] */ void op_zero_less(Stack *s);
+/* [C.05] */ void op_zero_equal(Stack *s);
+/* [C.06] */ void op_zero_greater(Stack *s);
 /* [C.09] */ void op_not(Stack *s);
 /* [IOC.01] */ void op_cr();
 /* [IOC.02] */ void op_emit(Stack *s);
@@ -121,6 +126,7 @@ int peek(Stack *s);
 /* [IOC.04] */ void op_spaces(Stack *s);
 /* [IOC.06] */ void op_type(Stack *s, int *m);
 /* [IOC.07] */void op_count(Stack *s, int *m);
+/* [ION.03] */ void op_print(Stack *s);
 /* [L.01] */ void op_add(Stack *s);
 /* [L.02] */ void op_sub(Stack *s);
 /* [L.03] */ void op_mul(Stack *s);
@@ -139,33 +145,27 @@ int peek(Stack *s);
 /* [L.21] */ void op_and(Stack *s);
 /* [L.22] */ void op_or(Stack *s);
 /* [L.23] */ void op_xor(Stack *s);
+/* [M.01] */ void op_fetch(Stack *s, int *m);
+/* [M.02] */ void op_store(Stack *s, int *m);
 /* [M.03] */ void op_cfetch(Stack *s, uint8_t *m);
 /* [M.04] */ void op_cstore(Stack *s, uint8_t *m);
+/* [M.05] */ void op_question(Stack *s, int *m);
 /* [M.07] */ void op_move(Stack *s, uint8_t *m);
 /* [M.08] */ void op_cmove(Stack *s, uint8_t *m);
+/* [M.09] */ void op_fill(Stack *s, uint8_t *m);
 /* [S.01] */ void op_dup(Stack *s);
 /* [S.02] */ void op_drop(Stack *s);
 /* [S.03] */ void op_swap(Stack *s);
+/* [S.04] */ void op_over(Stack *s);
 /* [S.05] */ void op_rot(Stack *s);
 /* [S.06] */ void op_pick(Stack *s);
 /* [S.07] */ void op_roll(Stack *s);
 /* [S.09] */ void op_depth(Stack *s);
-void op_fetch(Stack *s, int *m);
-void op_fill(Stack *s, uint8_t *m);
-void op_greater_than(Stack *s);
-void op_less_than(Stack *s);
-void op_over(Stack *s);
-void op_print(Stack *s);
-void op_question(Stack *s, int *m);
-void op_r_fetch(Stack *s, Stack *rs);
-void op_r_from(Stack *s, Stack *rs);
-void op_store(Stack *s, int *m);
-void op_to_r(Stack *s, Stack *rs);
-void op_zero_equal(Stack *s);
-void op_zero_greater(Stack *s);
-void op_zero_less(Stack *s);
+/* [S.10] */ void op_to_r(Stack *s, Stack *rs);
+/* [S.11] */ void op_r_from(Stack *s, Stack *rs);
+/* [S.12] */ void op_r_fetch(Stack *s, Stack *rs);
 
-/* pseudo operation */
+/* pseudo */
 void op_exit();
 
 /* helpers */
