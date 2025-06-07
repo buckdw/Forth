@@ -2,11 +2,16 @@
 #define FORTH_H_
 
 /*
- * Project:      Diederick's Forth Interpreter
- * Description:  Forth interpreter main logic
- * Author:       Diederick
- * Created:      2025-06-04
- * License:      MIT
+ * Project:         Diederick's Forth Interpreter
+ * Description:     Forth interpreter main logic
+ * Author:          Diederick
+ * Created:         2025-06-04
+ * License:         MIT
+ * 
+ * Remarks:         beware that a memory cell is 32-bits. The memory model
+ *                  is based on a heap of int
+ *                  some operations are byte based and use a casted 8-bit unsigned pointer
+ *                  to access individual bytes
  */
 
 #include <stdio.h>

@@ -464,6 +464,17 @@ void op_move(Stack *s, uint8_t *m) {
     }
 }
 
+/* ? */
+void op_question(Stack *s, uint8_t *m) {
+    int addr = pop(s);
+    if (addr < 0 || addr >= MEMORY_SIZE) {
+        printf("Memory access out of bounds at !\n");
+        exit(EXIT_FAILURE);
+    }
+    int value = *((int *)(m + addr));
+    printf("%d\n", value);
+}
+
 
 /* EXIT -- pseudo command */
 void op_exit() {
