@@ -57,6 +57,7 @@ typedef struct {
 #define ADD         "+"
 #define AND         "AND"
 #define CFETCH      "C@"
+#define CMOVE       "CMOVE"
 #define COUNT       "COUNT"
 #define CR          "CR"
 #define CSTORE      "C!"
@@ -104,65 +105,65 @@ typedef struct {
 #define TYPE        "TYPE"
 #define XOR         "XOR"
 #define ZERO        "0="
-#define CMOVE       "CMOVE"
 
 /* internal */
 void push(Stack *s, int value);
 int pop(Stack *s); 
 int peek(Stack *s); 
 
+
 /* operations */
-void op_add(Stack *s);
-void op_sub(Stack *s);
-void op_mul(Stack *s);
-void op_div(Stack *s);
-void op_mod(Stack *s);
-void op_one_plus(Stack *s);
-void op_one_minus(Stack *s);
-void op_two_plus(Stack *s);
-void op_two_minus(Stack *s);
-void op_d_plus(Stack *s);
-void op_negate(Stack *s);
-void op_dnegate(Stack *s);
-void op_abs(Stack *s);
-void op_dup(Stack *s);
-void op_drop(Stack *s);
-void op_swap(Stack *s);
-void op_rot(Stack *s);
-void op_store(Stack *s, int *m);
+/* [C.02] */ void op_equal(Stack *s);
+/* [C.09] */ void op_not(Stack *s);
+/* [IOC.01] */ void op_cr();
+/* [IOC.02] */ void op_emit(Stack *s);
+/* [IOC.03] */ void op_space();
+/* [IOC.04] */ void op_spaces(Stack *s);
+/* [IOC.06] */ void op_type(Stack *s, int *m);
+/* [IOC.07] */void op_count(Stack *s, int *m);
+/* [L.01] */ void op_add(Stack *s);
+/* [L.02] */ void op_sub(Stack *s);
+/* [L.03] */ void op_mul(Stack *s);
+/* [L.04] */ void op_div(Stack *s);
+/* [L.05] */ void op_mod(Stack *s);
+/* [L.07] */ void op_one_plus(Stack *s);
+/* [L.08] */ void op_one_minus(Stack *s);
+/* [L.09] */ void op_two_plus(Stack *s);
+/* [L.10] */ void op_two_minus(Stack *s);
+/* [L.11] */ void op_d_plus(Stack *s);
+/* [L.16] */ void op_max(Stack *s);
+/* [L.17] */void op_min(Stack *s);
+/* [L.18] */ void op_abs(Stack *s);
+/* [L.19] */ void op_negate(Stack *s);
+/* [L.20] */ void op_dnegate(Stack *s);
+/* [L.21] */ void op_and(Stack *s);
+/* [L.22] */ void op_or(Stack *s);
+/* [L.23] */ void op_xor(Stack *s);
+/* [M.03] */ void op_cfetch(Stack *s, uint8_t *m);
+/* [M.04] */ void op_cstore(Stack *s, uint8_t *m);
+/* [M.07] */ void op_move(Stack *s, uint8_t *m);
+/* [M.08] */ void op_cmove(Stack *s, uint8_t *m);
+/* [S.01] */ void op_dup(Stack *s);
+/* [S.02] */ void op_drop(Stack *s);
+/* [S.03] */ void op_swap(Stack *s);
+/* [S.05] */ void op_rot(Stack *s);
+/* [S.06] */ void op_pick(Stack *s);
+/* [S.07] */ void op_roll(Stack *s);
+/* [S.09] */ void op_depth(Stack *s);
 void op_fetch(Stack *s, int *m);
-void op_cstore(Stack *s, uint8_t *m);
-void op_cfetch(Stack *s, uint8_t *m);
-void op_over(Stack *s);
-void op_pick(Stack *s);
-void op_depth(Stack *s);
-void op_roll(Stack *s);
-void op_to_r(Stack *s, Stack *rs);
-void op_r_from(Stack *s, Stack *rs);
-void op_r_fetch(Stack *s, Stack *rs);
-void op_not(Stack *s);
-void op_less_than(Stack *s);
-void op_equal(Stack *s);
-void op_greater_than(Stack *s);
-void op_zero_equal(Stack *s);
-void op_zero_less(Stack *s);
-void op_zero_greater(Stack *s);
-void op_and(Stack *s);
-void op_or(Stack *s);
-void op_xor(Stack *s);
-void op_min(Stack *s);
-void op_max(Stack *s);
-void op_emit(Stack *s);
-void op_space();
-void op_cr();
-void op_spaces(Stack *s);
-void op_count(Stack *s, int *m);
-void op_type(Stack *s, int *m);
-void op_move(Stack *s, uint8_t *m);
-void op_cmove(Stack *s, uint8_t *m);
 void op_fill(Stack *s, uint8_t *m);
-void op_question(Stack *s, int *m);
+void op_greater_than(Stack *s);
+void op_less_than(Stack *s);
+void op_over(Stack *s);
 void op_print(Stack *s);
+void op_question(Stack *s, int *m);
+void op_r_fetch(Stack *s, Stack *rs);
+void op_r_from(Stack *s, Stack *rs);
+void op_store(Stack *s, int *m);
+void op_to_r(Stack *s, Stack *rs);
+void op_zero_equal(Stack *s);
+void op_zero_greater(Stack *s);
+void op_zero_less(Stack *s);
 
 /* pseudo operation */
 void op_exit();
