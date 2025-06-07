@@ -477,14 +477,20 @@ void op_question(Stack *s, int *m) {
 
 /* FILL */
 void op_fill(Stack *s, uint8_t *m) {
-    int c = pop(s);      // value to fill with (char)
-    int u = pop(s);      // number of bytes
-    int addr = pop(s);   // start address
-    if (addr < 0 || addr + u > MEMORY_SIZE * sizeof(int)) {
-        fprintf(stderr, "FILL out of bounds: addr=%d size=%d\n", addr, u);
+    int value = pop(s);    // value to fill
+    int count = pop(s);    // number of bytes to fill
+    int addr = pop(s);     // destination address
+    if (addr < 0 || count < 0) {
+        fprintf(stderr, "FILL error: Negative address or count\n");
         exit(EXIT_FAILURE);
     }
-    memset(m + addr, (uint8_t)c, u);
+    size_t uaddr = (size_t)addr;
+    size_t ucount = (size_t)count;
+    if (uaddr + ucount > MEMORY_SIZE * sizeof(int)) {
+        fprintf(stderr, "FILL error: Memory access out of bounds\n");
+        exit(EXIT_FAILURE);
+    }
+    memset(m + uaddr, value, ucount);
 }
 
 /* CMOVE */
@@ -503,7 +509,6 @@ void op_cmove(Stack *s, uint8_t *m) {
         m[dst + i] = m[src + i];
     }
 }
-
 
 /* . -> print and remove */
 void op_print(Stack *s) {
