@@ -1,8 +1,8 @@
 # Makefile for Simple Forth Interpreter
 CC = gcc
 CFLAGS = -Wall -Wextra -O2
-OBJ = obj/Forth.o obj/Stack.o
-TARGET = obj/Forth
+OBJ = Forth.o Stack.o
+TARGET = Forth
 
 all: $(TARGET)
 
