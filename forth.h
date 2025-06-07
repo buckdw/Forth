@@ -17,15 +17,10 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
+#include "Stack.h"
 
-#define STACK_SIZE 16384
 #define LINE_SIZE 256
 #define MEMORY_SIZE 16384
-
-typedef struct {
-    int data[STACK_SIZE];
-    int top;
-} Stack;
 
 typedef enum {
     OP,     // f()
@@ -106,11 +101,6 @@ typedef struct {
 #define XOR         "XOR"
 #define ZERO        "0="
 #define DIVMOD      "/MOD"
-
-/* internal */
-void push(Stack *s, int value);
-int pop(Stack *s); 
-int peek(Stack *s); 
 
 
 /* operations */

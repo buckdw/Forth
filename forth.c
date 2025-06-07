@@ -1,29 +1,4 @@
-#include "forth.h"
-
-
-void push(Stack *s, int value) {
-    if (s->top >= STACK_SIZE) {
-        fprintf(stderr, "Stack overflow!\n");
-        exit(EXIT_FAILURE);
-    }
-    s->data[s->top++] = value;
-}
-
-int pop(Stack *s) {
-    if (s->top == 0) {
-        fprintf(stderr, "Stack underflow!\n");
-        exit(EXIT_FAILURE);
-    }
-    return s->data[--s->top];
-}
-
-int peek(Stack *s) {
-    if (s->top == 0) {
-        fprintf(stderr, "Stack empty!\n");
-        exit(EXIT_FAILURE);
-    }
-    return s->data[s->top - 1];
-}
+#include "Forth.h"
 
 /*
  *  Memory
@@ -50,18 +25,7 @@ void op_store(Stack *s, int *m) {
     m[addr] = value;
 }
 
-/* C@ -> CSTORE -> store a byte [M.03] */
-void op_cstore(Stack *s, uint8_t *m) {
-    int addr = pop(s);
-    int value = pop(s);
-    if (addr < 0 || addr >= MEMORY_SIZE) {
-        fprintf(stderr, "Memory access out of bounds in C!\n");
-        exit(EXIT_FAILURE);
-    }
-    m[addr] = (uint8_t)(value & 0xFF);
-}
-
-/* C! -> CFETCH -> fetch a byte [M.04] */
+/* C@ -> CFETCH -> fetch a byte [M.03] */
 void op_cfetch(Stack *s, uint8_t *m) {
     int addr = pop(s);
     if (addr < 0 || addr >= MEMORY_SIZE) {
@@ -70,6 +34,17 @@ void op_cfetch(Stack *s, uint8_t *m) {
     }
     uint8_t byte = ((uint8_t *)m)[addr];
     push(s, byte);
+}
+
+/* C! -> CSTORE -> store a byte [M.04] */
+void op_cstore(Stack *s, uint8_t *m) {
+    int addr = pop(s);
+    int value = pop(s);
+    if (addr < 0 || addr >= MEMORY_SIZE) {
+        fprintf(stderr, "Memory access out of bounds in C!\n");
+        exit(EXIT_FAILURE);
+    }
+    m[addr] = (uint8_t)(value & 0xFF);
 }
 
 /* ? [M.05] */
@@ -704,9 +679,6 @@ void interpret(Stack *stack, Stack *return_stack, int *memory, char *line) {
     }
 }
 
-void init_stack(Stack *s) {
-    s->top = 0;
-}
 
 /*
  *  Main

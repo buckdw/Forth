@@ -1,8 +1,8 @@
 # Makefile for Simple Forth Interpreter
 CC = gcc
 CFLAGS = -Wall -Wextra -O2
-TARGET = forth
-SRC = forth.c
+TARGET = Forth
+SRC = Forth.c
 
 .PHONY: all clean
 
