@@ -25,114 +25,6 @@ int peek(Stack *s) {
     return s->data[s->top - 1];
 }
 
-/* ADD [L.1] */
-void op_add(Stack *s) {
-    int b = pop(s);
-    int a = pop(s);
-    push(s, a + b);
-}
-
-/* SUB [L.2] */
-void op_sub(Stack *s) {
-    int b = pop(s);
-    int a = pop(s);
-    push(s, a - b);
-}
-
-/* MUL [L.3] */
-void op_mul(Stack *s) {
-    int b = pop(s);
-    int a = pop(s);
-    push(s, a * b);
-}
-
-/* DIV [L.4] */
-void op_div(Stack *s) {
-    int b = pop(s);
-    int a = pop(s);
-    if (b == 0) {
-        fprintf(stderr, "Division by zero!\n");
-        exit(EXIT_FAILURE);
-    }
-    push(s, a / b);
-}
-
-/* MOD [L.5] */
-void op_mod(Stack *s) {
-    int b = pop(s);
-    int a = pop(s);
-    if (b == 0) {
-        fprintf(stderr, "Modulo by zero!\n");
-        exit(EXIT_FAILURE);
-    }
-    push(s, a % b);
-}
-
-/* 1+ [L.7] */
-void op_one_plus(Stack *s) {
-    push(s, pop(s) + 1);
-}
-
-/* 1- [L.8] */
-void op_one_minus(Stack *s) {
-    push(s, pop(s) - 1);
-}
-
-/* 2+ [L.9] */
-void op_two_plus(Stack *s) {
-    push(s, pop(s) + 2);
-}
-
-/* 2- [L.10] */
-void op_two_minus(Stack *s) {
-    push(s, pop(s) - 2);
-}
-
-/* D+ [L.11] */
-void op_d_plus(Stack *s) {
-    int d2_high = pop(s);
-    int d2_low  = pop(s);
-    int d1_high = pop(s);
-    int d1_low  = pop(s);
-
-    unsigned int low_sum = (unsigned int)d1_low + (unsigned int)d2_low;
-    int carry = (low_sum < (unsigned int)d1_low); // overflow detection
-
-    int high_sum = d1_high + d2_high + carry;
-
-    push(s, low_sum);
-    push(s, high_sum);
-}
-
-/* NEGATE [L.19] */
-void op_negate(Stack *s) {
-    int a = pop(s);
-    push(s, -a);
-}
-
-/* DNEGATE [L.20] */
-void op_dnegate(Stack *s) {
-    if (s->top < 2) {
-        fprintf(stderr, "Stack underflow for DNEGATE\n");
-        return;
-    }
-
-    int high = pop(s);
-    int low  = pop(s);
-
-    int64_t value = ((int64_t)(uint32_t)high << 32) | (uint32_t)low;
-    value = -value;
-
-    push(s, (int)(value >> 32));       // high part
-    push(s, (int)(value & 0xFFFFFFFF)); // low part
-}
-
-
-/* ABS [L.18] */
-void op_abs(Stack *s) {
-    int a = pop(s);
-    push(s, (a < 0) ? -a : a);
-}
 /*
  *  Memory
  */
@@ -414,15 +306,95 @@ void op_zero_greater(Stack *s) {
     push(s, (a > 0) ? -1 : 0);
 }
 
-/* NOT [C.9 */
+/* NOT [C.9] */
 void op_not(Stack *s) {
     int a = pop(s);
     push(s, ~a);
 }
 
+
 /*
  *  LOGICAL
  */
+
+ /* ADD [L.1] */
+void op_add(Stack *s) {
+    int b = pop(s);
+    int a = pop(s);
+    push(s, a + b);
+}
+
+/* SUB [L.2] */
+void op_sub(Stack *s) {
+    int b = pop(s);
+    int a = pop(s);
+    push(s, a - b);
+}
+
+/* MUL [L.3] */
+void op_mul(Stack *s) {
+    int b = pop(s);
+    int a = pop(s);
+    push(s, a * b);
+}
+
+/* DIV [L.4] */
+void op_div(Stack *s) {
+    int b = pop(s);
+    int a = pop(s);
+    if (b == 0) {
+        fprintf(stderr, "Division by zero!\n");
+        exit(EXIT_FAILURE);
+    }
+    push(s, a / b);
+}
+
+/* MOD [L.5] */
+void op_mod(Stack *s) {
+    int b = pop(s);
+    int a = pop(s);
+    if (b == 0) {
+        fprintf(stderr, "Modulo by zero!\n");
+        exit(EXIT_FAILURE);
+    }
+    push(s, a % b);
+}
+
+/* 1+ [L.7] */
+void op_one_plus(Stack *s) {
+    push(s, pop(s) + 1);
+}
+
+/* 1- [L.8] */
+void op_one_minus(Stack *s) {
+    push(s, pop(s) - 1);
+}
+
+/* 2+ [L.9] */
+void op_two_plus(Stack *s) {
+    push(s, pop(s) + 2);
+}
+
+/* 2- [L.10] */
+void op_two_minus(Stack *s) {
+    push(s, pop(s) - 2);
+}
+
+/* D+ [L.11] */
+void op_d_plus(Stack *s) {
+    int d2_high = pop(s);
+    int d2_low  = pop(s);
+    int d1_high = pop(s);
+    int d1_low  = pop(s);
+
+    unsigned int low_sum = (unsigned int)d1_low + (unsigned int)d2_low;
+    int carry = (low_sum < (unsigned int)d1_low); // overflow detection
+
+    int high_sum = d1_high + d2_high + carry;
+
+    push(s, low_sum);
+    push(s, high_sum);
+}
 
 /* MAX [L.16] */
 void op_max(Stack *s) {
@@ -436,6 +408,35 @@ void op_min(Stack *s) {
     int b = pop(s);
     int a = pop(s);
     push(s, (a < b) ? a : b);
+}
+
+/* ABS [L.18] */
+void op_abs(Stack *s) {
+    int a = pop(s);
+    push(s, (a < 0) ? -a : a);
+}
+
+/* NEGATE [L.19] */
+void op_negate(Stack *s) {
+    int a = pop(s);
+    push(s, -a);
+}
+
+/* DNEGATE [L.20] */
+void op_dnegate(Stack *s) {
+    if (s->top < 2) {
+        fprintf(stderr, "Stack underflow for DNEGATE\n");
+        return;
+    }
+
+    int high = pop(s);
+    int low  = pop(s);
+
+    int64_t value = ((int64_t)(uint32_t)high << 32) | (uint32_t)low;
+    value = -value;
+
+    push(s, (int)(value >> 32));       // high part
+    push(s, (int)(value & 0xFFFFFFFF)); // low part
 }
 
 /* AND [L.21] */
@@ -458,6 +459,7 @@ void op_xor(Stack *s) {
     int a = pop(s);
     push(s, a ^ b);
 }
+
 
 /*
  *  INPUT/OUTPUT
@@ -534,8 +536,6 @@ void op_count(Stack *s, int *m) {
     push(s, len);       // Length
 }
 
-
-
 /* . -> print and remove */
 void op_print(Stack *s) {
     fprintf(stdout, "%d\n", pop(s));
@@ -565,59 +565,59 @@ bool is_number(const char *token) {
 }
 
 DictEntry dictionary[] = {
-/* OPERATOR */     {      ADD, OP_0, {.fp_s       = op_add            } },
-/* OPERATOR */     {      SUB, OP_0, {.fp_s       = op_sub            } },
-/* OPERATOR */     {      MUL, OP_0, {.fp_s       = op_mul            } },
-/* OPERATOR */     {      DIV, OP_0, {.fp_s       = op_div            } },
-/* OPERATOR */     {      MOD, OP_0, {.fp_s       = op_mod            } },
-/* OPERATOR */     { ONE_PLUS, OP_0, {.fp_s       = op_one_plus       } },
-/* OPERATOR */     {  ONE_MIN, OP_0, {.fp_s       = op_one_minus      } },
-/* OPERATOR */     { TWO_PLUS, OP_0, {.fp_s       = op_two_plus       } },
-/* OPERATOR */     {  TWO_MIN, OP_0, {.fp_s       = op_two_minus      } },
-/* OPERATOR */     {    DPLUS, OP_0, {.fp_s       = op_d_plus         } },
-/* LOGICAL */      {   NEGATE, OP_0, {.fp_s       = op_negate         } },
-/* LOGICAL */      {  DNEGATE, OP_0, {.fp_s       = op_dnegate        } },
-/* OPERATOR */     {      ABS, OP_0, {.fp_s       = op_abs            } },
-/* STACK */        {      DUP, OP_0, {.fp_s       = op_dup            } },
-/* STACK */        {     DROP, OP_0, {.fp_s       = op_drop           } },
-/* STACK */        {     SWAP, OP_0, {.fp_s       = op_swap           } },
-/* STACK */        {      ROT, OP_0, {.fp_s       = op_rot            } },
-/* MEMORY */       {    FETCH, OP_2, {.fp_s_m     = op_fetch          } },
-/* MEMORY */       {    STORE, OP_2, {.fp_s_m     = op_store          } },
-/* MEMORY */       {   CFETCH, OP_3, {.fp_s_bm    = op_cfetch         } },
-/* MEMORY */       {   CSTORE, OP_3, {.fp_s_bm    = op_cstore         } },
-/* STACK */        {     OVER, OP_0, {.fp_s       = op_over           } },
-/* STACK */        {     PICK, OP_0, {.fp_s       = op_pick           } },
-/* STACK */        {    DEPTH, OP_0, {.fp_s       = op_depth          } },
-/* STACK */        {     ROLL, OP_0, {.fp_s       = op_roll           } },
-/* STACK */        {      TOR, OP_1, {.fp_s_rs    = op_to_r           } },
-/* STACK */        {    RFROM, OP_1, {.fp_s_rs    = op_r_from         } },
-/* STACK */        {   RFETCH, OP_1, {.fp_s_rs    = op_r_fetch        } },
-/* COMPARE */      {      NOT, OP_0, {.fp_s       = op_not            } },
-/* COMPARE */      {       LT, OP_0, {.fp_s       = op_less_than      } }, 
-/* COMPARE */      {       EQ, OP_0, {.fp_s       = op_equal          } }, 
-/* COMPARE */      {       GT, OP_0, {.fp_s       = op_greater_than   } }, 
-/* COMPARE */      {     ZERO, OP_0, {.fp_s       = op_zero_equal     } },
-/* COMPARE */      {      NEG, OP_0, {.fp_s       = op_zero_less      } },
-/* COMPARE */      {      POS, OP_0, {.fp_s       = op_zero_greater   } },
-/* LOGICAL */      {      AND, OP_0, {.fp_s       = op_and            } },
-/* LOGICAL */      {       OR, OP_0, {.fp_s       = op_or             } },
-/* LOGICAL */      {      XOR, OP_0, {.fp_s       = op_xor            } },
-/* LOGICAL */      {      MIN, OP_0, {.fp_s       = op_min            } },
-/* LOGICAL */      {      MAX, OP_0, {.fp_s       = op_max            } },
-/* IO */           {     EMIT, OP_0, {.fp_s       = op_emit           } },
-/* IO */           {    SPACE, OP,   {.fp         = op_space          } },
+/* [C.01] */     {       LT, OP_0, {.fp_s       = op_less_than      } }, 
+/* [C.02] */     {       EQ, OP_0, {.fp_s       = op_equal          } }, 
+/* [C.03] */     {       GT, OP_0, {.fp_s       = op_greater_than   } }, 
+/* [C.04] */     {      NEG, OP_0, {.fp_s       = op_zero_less      } },
+/* [C.05] */     {     ZERO, OP_0, {.fp_s       = op_zero_equal     } },
+/* [C.06] */     {      POS, OP_0, {.fp_s       = op_zero_greater   } },
+/* [C.09] */     {      NOT, OP_0, {.fp_s       = op_not            } },
+/* [L.01] */     {      ADD, OP_0, {.fp_s       = op_add            } },
+/* [L.02] */     {      SUB, OP_0, {.fp_s       = op_sub            } },
+/* [L.03] */     {      MUL, OP_0, {.fp_s       = op_mul            } },
+/* [L.04] */     {      DIV, OP_0, {.fp_s       = op_div            } },
+/* [L.05] */     {      MOD, OP_0, {.fp_s       = op_mod            } },
+/* [L.07] */     { ONE_PLUS, OP_0, {.fp_s       = op_one_plus       } },
+/* [L.08] */     {  ONE_MIN, OP_0, {.fp_s       = op_one_minus      } },
+/* [L.09] */     { TWO_PLUS, OP_0, {.fp_s       = op_two_plus       } },
+/* [L.10] */     {  TWO_MIN, OP_0, {.fp_s       = op_two_minus      } },
+/* [L.11] */     {    DPLUS, OP_0, {.fp_s       = op_d_plus         } },
+/* [L.18] */     {      ABS, OP_0, {.fp_s       = op_abs            } },
+/* [L.19] */     {   NEGATE, OP_0, {.fp_s       = op_negate         } },
+/* [L.20] */     {  DNEGATE, OP_0, {.fp_s       = op_dnegate        } },
+/* [M.01] */     {    FETCH, OP_2, {.fp_s_m     = op_fetch          } },
+/* [M.02] */     {    STORE, OP_2, {.fp_s_m     = op_store          } },
+/* [M.03] */     {   CFETCH, OP_3, {.fp_s_bm    = op_cfetch         } },
+/* [M.04] */     {   CSTORE, OP_3, {.fp_s_bm    = op_cstore         } },
+/* [S.01] */     {      DUP, OP_0, {.fp_s       = op_dup            } },
+/* [S.02] */     {     DROP, OP_0, {.fp_s       = op_drop           } },
+/* [S.03] */     {     SWAP, OP_0, {.fp_s       = op_swap           } },
+/* [S.04] */     {     OVER, OP_0, {.fp_s       = op_over           } },
+/* [S.05] */     {      ROT, OP_0, {.fp_s       = op_rot            } },
 /* IO */           {       CR, OP,   {.fp         = op_cr             } },
-/* IO */           {   SPACES, OP_0, {.fp_s       = op_spaces         } },
-/* IO */           {    COUNT, OP_2, {.fp_s_m     = op_count          } },
+/* IO */           {     EMIT, OP_0, {.fp_s       = op_emit           } },
 /* IO */           {     TYPE, OP_2, {.fp_s_m     = op_type           } },
+/* IO */           {    COUNT, OP_2, {.fp_s_m     = op_count          } },
+/* IO */           {    PRINT, OP_0, {.fp_s       = op_print          } },
+/* IO */           {    SPACE, OP,   {.fp         = op_space          } },
+/* IO */           {   SPACES, OP_0, {.fp_s       = op_spaces         } },
+/* LOGICAL */      {       OR, OP_0, {.fp_s       = op_or             } },
+/* LOGICAL */      {      AND, OP_0, {.fp_s       = op_and            } },
+/* LOGICAL */      {      MAX, OP_0, {.fp_s       = op_max            } },
+/* LOGICAL */      {      MIN, OP_0, {.fp_s       = op_min            } },
+/* LOGICAL */      {      XOR, OP_0, {.fp_s       = op_xor            } },
+/* MEMORY */       {     FILL, OP_3, {.fp_s_bm    = op_fill           } },
 /* MEMORY */       {     MOVE, OP_3, {.fp_s_bm    = op_move           } },
 /* MEMORY */       {    CMOVE, OP_3, {.fp_s_bm    = op_cmove          } },
 /* MEMORY */       { QUESTION, OP_2, {.fp_s_m     = op_question       } },
-/* MEMORY */       {     FILL, OP_3, {.fp_s_bm    = op_fill           } },
-/* IO */           {    PRINT, OP_0, {.fp_s       = op_print          } },
 /* PSEUDO */       {     EXIT, OP,   {.fp         = op_exit           } },
 /* SENTINEL */     {     NULL, OP_0, {NULL                            } }
+/* STACK */        {      TOR, OP_1, {.fp_s_rs    = op_to_r           } },
+/* STACK */        {     PICK, OP_0, {.fp_s       = op_pick           } },
+/* STACK */        {     ROLL, OP_0, {.fp_s       = op_roll           } },
+/* STACK */        {    DEPTH, OP_0, {.fp_s       = op_depth          } },
+/* STACK */        {    RFROM, OP_1, {.fp_s_rs    = op_r_from         } },
+/* STACK */        {   RFETCH, OP_1, {.fp_s_rs    = op_r_fetch        } },
 };   
  
 DictEntry *find_entry(const char *word) {
