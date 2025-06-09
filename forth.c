@@ -175,7 +175,8 @@ void op_pick(Stack *s) {
         exit(EXIT_FAILURE);
     }
     int n = pop(s);  // the index
-    if (n < 0 || n >= s->top) {
+    if (n < 0 || n > s->top) {
+        fprintf(stderr, "n = %d", n);
         fprintf(stderr, "Invalid PICK index: %d\n", n);
         exit(EXIT_FAILURE);
     }
