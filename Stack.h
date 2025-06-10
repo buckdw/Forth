@@ -17,6 +17,6 @@ int pop(Stack *s);
 int peek(Stack *s);
 
 void init_stack(Stack *s);
-bool stack_has(Stack *s, int n);
+bool stack_has_min_depth(Stack *s, int n);
 
 #endif

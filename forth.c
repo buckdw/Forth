@@ -146,7 +146,7 @@ void op_swap(Stack *s) {
 
 /* OVER [S.04] */
 void op_over(Stack *s) {
-    if (s->top < 2) {
+    if (!stack_has_min_depth(s, 2)) {
         fprintf(stderr, "Stack underflow for OVER!\n");
         exit(EXIT_FAILURE);
     }
@@ -156,7 +156,7 @@ void op_over(Stack *s) {
 
 /* ROT [S.05] */
 void op_rot(Stack *s) {
-    if (s->top < 3) {
+    if (!stack_has_min_depth(s, 3)) {
         fprintf(stderr, "Stack underflow for ROT!\n");
         exit(EXIT_FAILURE);
     }
@@ -176,7 +176,6 @@ void op_pick(Stack *s) {
     }
     int n = pop(s);  // the index
     if (n < 0 || n > s->top) {
-        fprintf(stderr, "n = %d", n);
         fprintf(stderr, "Invalid PICK index: %d\n", n);
         exit(EXIT_FAILURE);
     }
