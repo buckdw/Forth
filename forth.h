@@ -48,6 +48,10 @@ typedef struct {
     } func;
 } DictEntry;
 
+#define BANNER_YAFI     "YAFI - 32-bit Forth79 Interpreter (C) - 2025.\n"
+#define BANNER_AUTHOR   "YAFI - Yet Another Forth Interpreter. Diederick de Buck.\n\n"
+#define BANNER_HELP     "Type 'exit' to quit.\n"
+
 #define ABS         "ABS"
 #define ADD         "+"
 #define AND         "AND"
